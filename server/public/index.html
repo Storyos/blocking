@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Klip Login</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <style>
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <h1>Klip Login</h1>
+  <button id="login-button">Login with Klip</button>
+  <div id="qrcode"></div>
+  <div id="error-message" class="error"></div>
+
+  <script>
+    document.getElementById('login-button').addEventListener('click', async () => {
+      try {
+        const response = await axios.get('/login');
+        const { qrUrl } = response.data;
+
+        QRCode.toCanvas(document.getElementById('qrcode'), qrUrl, (error) => {
+          if (error) console.error(error);
+          console.log('QR code generated!');
+        });
+      } catch (error) {
+        const errorMessage = error.response ? error.response.data : 'An unexpected error occurred';
+        document.getElementById('error-message').textContent = errorMessage;
+        console.error('Error during Klip login request:', errorMessage);
+      }
+    });
+  </script>
+</body>
+</html>
