@@ -48,20 +48,31 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
-//
-html {
-  background-color: black;
-}
+	
 body {
-  width: 360px;
-  height: 800px;
-  background-color: white;
+	/* 화면을 중앙에 배치하기 위한 스타일 */
+	margin: 0;
+	padding: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100vw;
+	height: 100vh;
+	background-color: white;
+}
+.container {
+	/* 박스의 너비와 높이 설정 */
+	width: 360px; /* 수정된 너비 */
+	height: 100vh;
+	background-color: #f5f5f5; /* 박스 배경 색상 */
 }
  `;
   return (
     <>
       <GlobalStyle />
-      <AppRouter />
+      <div className="container">
+        <AppRouter />
+      </div>
     </>
   );
 }
