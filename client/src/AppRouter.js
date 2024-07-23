@@ -3,6 +3,8 @@ import WalletLogin from "./routes/WalletLogin";
 import WalletPwd from "./routes/WalletPwd";
 import WalletConfirm from "./routes/WalletConfirm";
 import KlipLogin from "./routes/test";
+import Main from "./routes/Main";
+import MenubarLayout from "./routes/MenubarLayout";
 
 export default function AppRouter() {
   return (
@@ -23,7 +25,15 @@ export default function AppRouter() {
         <Route
           path="/test"
           element={<KlipLogin/>}
-       />
+        />
+        <Route
+          path="/Main"
+          element={<Main />}
+        />
+        <Route
+          path="/MenubarLayout"
+          element={<MenubarLayout />}
+        />
       </Routes>
     </BrowserRouter>
   );
