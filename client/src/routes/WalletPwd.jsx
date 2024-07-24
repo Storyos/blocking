@@ -1,8 +1,17 @@
 import { useState } from "react";
-import { Container, TextWrapper } from "../styles";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 150px;
+`;
+const TextWrapper = styled.div`
+  text-align: center;
+`;
 const PwdForm = styled.form`
   display: flex;
   flex-direction: column;
