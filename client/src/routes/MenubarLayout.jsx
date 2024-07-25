@@ -5,12 +5,12 @@ import { FaHome, FaPlus, FaEnvelope, FaCog } from 'react-icons/fa';
 import { CgFileDocument } from 'react-icons/cg'; // 서류 아이콘 추가
 
 const Menubar = styled.div`
-  width: 330px;
+  width: 318px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: #fff;
-  padding: 10px 20px;
+  padding: 15px 20px;
   position: fixed;
   bottom: 0;
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);

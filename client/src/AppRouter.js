@@ -5,6 +5,7 @@ import WalletConfirm from "./routes/WalletConfirm";
 import KlipLogin from "./routes/test";
 import Main from "./routes/Main";
 import MenubarLayout from "./routes/MenubarLayout";
+import Profile from "./routes/Profile";
 
 export default function AppRouter() {
   return (
@@ -33,6 +34,10 @@ export default function AppRouter() {
         <Route
           path="/MenubarLayout"
           element={<MenubarLayout />}
+        />
+        <Route
+          path="/Profile"
+          element={<Profile />}
         />
       </Routes>
     </BrowserRouter>
