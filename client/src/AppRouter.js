@@ -6,6 +6,7 @@ import KlipLogin from "./routes/test";
 import Main from "./routes/Main";
 import MenubarLayout from "./routes/MenubarLayout";
 import Profile from "./routes/Profile";
+import Notification from "./routes/Notification";
 
 export default function AppRouter() {
   return (
@@ -38,6 +39,10 @@ export default function AppRouter() {
         <Route
           path="/Profile"
           element={<Profile />}
+        />
+        <Route
+          path="/Notification"
+          element={<Notification />}
         />
       </Routes>
     </BrowserRouter>

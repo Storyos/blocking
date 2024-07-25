@@ -93,7 +93,7 @@ const RightArrowIcon = styled(RiArrowRightSLine)`
 `;
 
 const DeleteContainer = styled.div`
-  margin-top: 250px; 
+  margin-top: 220px; 
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -125,7 +125,6 @@ const Profile = () => {
           <Email>dsdf06@naver.com</Email> 
           <RightArrowIcon />
         </ItemContainer>
-        
         <ItemContainer>
           <Icon><FaLock /></Icon>
           <Text>비밀번호 관리</Text>
