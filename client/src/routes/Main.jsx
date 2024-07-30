@@ -1,7 +1,7 @@
-import React from 'react';
-import styled from 'styled-components';
-import { FaBell } from 'react-icons/fa'; 
-import MenubarLayout from './MenubarLayout';
+import React from "react";
+import styled from "styled-components";
+import { FaBell } from "react-icons/fa";
+import MenubarLayout from "../components/MenubarLayout";
 // 스타일링
 const Container = styled.div`
   display: flex;
@@ -29,7 +29,7 @@ const NotificationIcon = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #50C2C9;
+  color: #50c2c9;
   font-size: 20px;
   font-weight: bold;
   cursor: pointer;
@@ -67,24 +67,23 @@ const Notification = styled.div`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
-
 // Main 컴포넌트
 const Main = () => {
   return (
     <Container>
       <Header>
-        <NotificationIcon><FaBell /></NotificationIcon>
+        <NotificationIcon>
+          <FaBell />
+        </NotificationIcon>
       </Header>
-      <CardBox>
-        카드박스
-      </CardBox>
+      <CardBox>카드박스</CardBox>
       <Recent>Recent</Recent>
       <GridContainer>
         <Notification>Notification 1</Notification>
         <Notification>Notification 2</Notification>
         <Notification>Notification 3</Notification>
       </GridContainer>
-      <MenubarLayout/>
+      <MenubarLayout />
     </Container>
   );
 };

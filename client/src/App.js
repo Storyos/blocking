@@ -3,6 +3,7 @@ import styled, { createGlobalStyle } from "styled-components";
 
 function App() {
   const GlobalStyle = createGlobalStyle`
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap');
   // style 초기화
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -58,6 +59,12 @@ body {
 	width: 100vw;
 	height: 100vh;
 	background-color: white;
+
+	// 폰트설정
+	font-family: "Noto Sans KR", sans-serif;
+	font-optical-sizing: auto;
+	font-weight: 400;
+  	font-style: normal;
 }
 .container {
 	/* 박스의 너비와 높이 설정 */

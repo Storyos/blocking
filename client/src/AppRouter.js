@@ -1,12 +1,13 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import WalletLogin from "./routes/WalletLogin";
-import WalletPwd from "./routes/WalletPwd";
-import WalletConfirm from "./routes/WalletConfirm";
-import KlipLogin from "./routes/test";
+import WalletLogin from "./routes/login/WalletLogin";
+import WalletPwd from "./routes/login/WalletPwd";
+import WalletConfirm from "./routes/login/WalletConfirm";
+import KlipLogin from "./routes/login/KlipLogin";
 import Main from "./routes/Main";
-import MenubarLayout from "./routes/MenubarLayout";
-import Profile from "./routes/Profile";
-import Notification from "./routes/Notification";
+// import MenubarLayout from "./components/MenubarLayout";
+import Profile from "./routes/settings/Profile";
+import Notification from "./routes/settings/Notification";
+import Settings from "./routes/settings/Settings";
 
 export default function AppRouter() {
   return (
@@ -26,15 +27,19 @@ export default function AppRouter() {
         />
         <Route
           path="/test"
-          element={<KlipLogin/>}
+          element={<KlipLogin />}
         />
         <Route
           path="/Main"
           element={<Main />}
         />
-        <Route
+        {/* <Route
           path="/MenubarLayout"
           element={<MenubarLayout />}
+        /> */}
+        <Route
+          path="/Settings"
+          element={<Settings />}
         />
         <Route
           path="/Profile"
@@ -43,6 +48,10 @@ export default function AppRouter() {
         <Route
           path="/Notification"
           element={<Notification />}
+        />
+        <Route
+          path="/KlipLogin"
+          element={<KlipLogin />}
         />
       </Routes>
     </BrowserRouter>
