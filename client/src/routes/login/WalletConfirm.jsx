@@ -6,15 +6,20 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding-top: 450px;
-  font-size: 15px;
+  padding-top: 280px;
   overflow: hidden;
 `;
 const TextWrapper = styled.div`
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  width: 310px;
+  gap: 5px;
+  padding-bottom: 80px;
 `;
 const ConfirmBtn = styled.div`
-  width: 120px;
+  width: 340px;
   height: 40px;
   border: 0px;
   border-radius: 10px;
@@ -25,7 +30,6 @@ const ConfirmBtn = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 30px;
 `;
 const MainLink = styled(Link)`
   text-decoration: none;
@@ -36,10 +40,14 @@ export default function WalletConfirm() {
   return (
     <>
       <Container>
-        <TextWrapper>회원이 되신 걸 환영합니다!</TextWrapper>
-        <ConfirmBtn>
-          <MainLink to={`/Main`}>확인</MainLink>
-        </ConfirmBtn>
+        <TextWrapper>
+          <div>회원이 되신 걸 환영합니다!</div>
+          <div>지금 바로 서비스를 이용해 보세요.</div>
+        </TextWrapper>
+        <MainLink to={`/Main`}>
+          {" "}
+          <ConfirmBtn>확인</ConfirmBtn>
+        </MainLink>
       </Container>
     </>
   );

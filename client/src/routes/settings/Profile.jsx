@@ -1,9 +1,9 @@
-import React from 'react';
-import styled from 'styled-components';
-import { VscChevronLeft } from 'react-icons/vsc'; 
-import { FaUserCog, FaLock, FaTrash } from 'react-icons/fa'; 
-import { RiArrowRightSLine } from 'react-icons/ri'; 
-import MenubarLayout from './MenubarLayout';
+import React from "react";
+import styled from "styled-components";
+import { FaUserCog, FaLock, FaTrash } from "react-icons/fa";
+import { RiArrowRightSLine } from "react-icons/ri";
+import MenubarLayout from "../../components/MenubarLayout";
+import BackIcon from "../../components/BackIcon";
 
 const Container = styled.div`
   display: flex;
@@ -12,21 +12,6 @@ const Container = styled.div`
   padding: 20px;
   position: relative;
   background-color: #f5f5f5;
-`;
-
-const BackIcon = styled(VscChevronLeft)`
-  position: absolute;
-  left: 15px;
-  top: 15px;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #50C2C9;
-  font-size: 20px;
-  cursor: pointer;
 `;
 
 const ProfilePicContainer = styled.div`
@@ -71,7 +56,7 @@ const ItemContainer = styled.div`
 
 const Icon = styled.div`
   font-size: 22px;
-  color: #50C2C9;
+  color: #50c2c9;
   margin-right: 20px;
   margin-left: 20px;
 `;
@@ -93,7 +78,7 @@ const RightArrowIcon = styled(RiArrowRightSLine)`
 `;
 
 const DeleteContainer = styled.div`
-  margin-top: 220px; 
+  margin-top: 220px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -101,13 +86,13 @@ const DeleteContainer = styled.div`
 
 const DeleteIcon = styled(FaTrash)`
   font-size: 25px;
-  color: #50C2C9;
+  color: #50c2c9;
   margin-bottom: 15px;
 `;
 
 const DeleteText = styled.div`
   font-size: 16px;
-  color: #50C2C9;
+  color: #50c2c9;
 `;
 
 const Profile = () => {
@@ -115,18 +100,28 @@ const Profile = () => {
     <Container>
       <BackIcon />
       <ProfilePicContainer>
-        <ProfilePic src="https://via.placeholder.com/120" alt="Profile" />
+        <ProfilePic
+          src="https://via.placeholder.com/120"
+          alt="Profile"
+        />
       </ProfilePicContainer>
-      <Name type="text" placeholder="Your Name" />
+      <Name
+        type="text"
+        placeholder="Your Name"
+      />
       <LinkedAccountContainer>
         <ItemContainer>
-          <Icon><FaUserCog /></Icon>
+          <Icon>
+            <FaUserCog />
+          </Icon>
           <Text>계정 관리</Text>
-          <Email>dsdf06@naver.com</Email> 
+          <Email>dsdf06@naver.com</Email>
           <RightArrowIcon />
         </ItemContainer>
         <ItemContainer>
-          <Icon><FaLock /></Icon>
+          <Icon>
+            <FaLock />
+          </Icon>
           <Text>비밀번호 관리</Text>
           <RightArrowIcon />
         </ItemContainer>
@@ -135,7 +130,7 @@ const Profile = () => {
         <DeleteIcon />
         <DeleteText>Delete Account</DeleteText>
       </DeleteContainer>
-      <MenubarLayout/>
+      <MenubarLayout />
     </Container>
   );
 };
