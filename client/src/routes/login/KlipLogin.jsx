@@ -10,28 +10,50 @@ function KlipLogin() {
   const [myAddress, setMyAddress] = useState(DEFAULT_ADDRESS);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  const POLLING_INTERVAL = 2000; // 폴링 간격 (2초)
+  const MAX_ATTEMPTS = 30; // 최대 시도 횟수 (2초 간격으로 약 1분간 시도)
+
   const getUserData = async () => {
     try {
       const prepareResponse = await axios.post('http://localhost:4000/api/klip/prepare');
       const { requestKey, qrUrl } = prepareResponse.data;
       setQrvalueAuth(qrUrl);
 
+      let attempts = 0; // 폴링 시도 횟수
+
       const timerId = setInterval(async () => {
-        const resultResponse = await axios.get(`http://localhost:4000/api/klip/result/${requestKey}`);
-        if (resultResponse.data.result) {
-          const { klaytn_address: address } = resultResponse.data.result;
-          setMyAddress(address);
-          setIsLoggedIn(true); // 사용자가 로그인되었음을 표시
-          clearInterval(timerId);
-          setQrvalueAuth(DEFAULT_QR_CODE);
+        try {
+          const resultResponse = await axios.get(`http://localhost:4000/api/klip/result/${requestKey}`);
+          console.log('resultResponse :>> ', resultResponse);
+          if (resultResponse.data.token) {
+            const { token, address } = resultResponse.data;
+
+            localStorage.setItem('jwtToken', token);
+            
+            setMyAddress(address);
+            setIsLoggedIn(true); // 사용자가 로그인되었음을 표시
+            clearInterval(timerId);
+            setQrvalueAuth(DEFAULT_QR_CODE);
+          } else {
+            console.log('Waiting for user to complete QR code authentication...');
+          }
+        } catch (pollError) {
+          console.error('Error during polling:', pollError);
         }
-      }, 1000);
+
+        attempts += 1;
+        if (attempts >= MAX_ATTEMPTS) {
+          clearInterval(timerId);
+          console.error('QR code authentication timed out.');
+        }
+      }, POLLING_INTERVAL);
     } catch (error) {
-      console.error('Failed to get user data', error);
+      console.error('Failed to prepare QR code', error);
     }
   };
 
   const handleLogout = () => {
+    localStorage.removeItem('jwtToken'); // 로그아웃 시 토큰 제거
     setMyAddress(DEFAULT_ADDRESS);
     setIsLoggedIn(false); // 로그아웃 상태로 변경
   };
@@ -53,12 +75,12 @@ function KlipLogin() {
               >
                 <QRCode value={qrvalueAuth} size={256} style={{ margin: 'auto' }} />
                 <br />
-                <br />
               </div>
             )}
           </>
         ) : (
           <div>
+            <br />
             <p>환영합니다! 지갑 주소: {myAddress}</p>
             <button onClick={handleLogout}>로그아웃</button>
           </div>
