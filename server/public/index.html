@@ -11,7 +11,7 @@
     <script>
         document.getElementById('loginButton').addEventListener('click', async () => {
             try {
-                const response = await axios.post('/klip/login');
+                const response = await axios.get('/klip/login');
                 const requestKey = response.data.requestKey;
                 const klipUrl = `https://klipwallet.com/?target=/a2a?request_key=${requestKey}`;
 
@@ -23,6 +23,7 @@
 
                     if (result != null) {
                         console.log('Login successful:', result.walletAddress);
+                        console.log(result);
                         clearInterval(resultInterval);
                     } else {
                         console.log(result);

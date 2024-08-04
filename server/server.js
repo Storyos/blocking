@@ -1,34 +1,38 @@
+// server/server.js
 const express = require('express');
-const axios = require('axios');
-const path = require('path');
-const bodyParser = require('body-parser');
-const klipRouter = require('./routes/klip_login');
-require('dotenv').config();
+const cors = require('cors');
+const { prepareKlipRequest, getKlipResult, getKlipAccessUrl } = require('./services/klipService');
 
 const app = express();
-const port = 3001;
-const cors = require('cors');
-const { timeStamp } = require('console');
+const PORT = 4000;
+
 app.use(cors());
-
 app.use(express.json());
-app.use(express.static('public')); // 정적 파일 제공을 위한 설정
-app.use(bodyParser.json());
-app.use('/klip',klipRouter);
 
-// 루트 경로에 대한 엔드포인트 설정
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+// Klip API 준비 요청 엔드포인트
+app.post('/api/klip/prepare', async (req, res) => {
+  try {
+    const requestKey = await prepareKlipRequest();
+    const qrUrl = getKlipAccessUrl(requestKey);
+    res.json({ requestKey, qrUrl });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to prepare Klip request' });
+  }
 });
 
-app.get('/data',(req,res)=>{
-  const data = {
-    message: 'Hello from BE',
-    timeStamp: new Date(),
-  };
-  res.json(data);
+// Klip API 결과 요청 엔드포인트
+app.get('/api/klip/result/:requestKey', async (req, res) => {
+  const { requestKey } = req.params;
+  try {
+    const result = await getKlipResult(requestKey);
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to get Klip result' });
+  }
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
