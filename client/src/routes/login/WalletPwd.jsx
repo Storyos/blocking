@@ -14,6 +14,7 @@ const TextWrapper = styled.div`
   text-align: center;
   font-size: 16px;
   margin-top: 120px;
+  white-space: pre-line;
 `;
 
 const PwdForm = styled.form`
@@ -21,6 +22,8 @@ const PwdForm = styled.form`
   justify-content: center;
   align-items: center;
   gap: 10px;
+  position: absolute;
+  margin-top: 140px;
 `;
 
 const PwdDisplay = styled.div`
@@ -78,17 +81,26 @@ const Key = styled.button`
 
 export default function WalletPwd() {
   const [pwd, setPwd] = useState("");
+  const [firstPwd, setFirstPwd] = useState("");
   const [confirmMsg, setConfirmMsg] = useState("비밀번호를 설정해주세요.");
   const [submitCount, setSubmitCount] = useState(0);
   const navigate = useNavigate();
 
   const onSubmit = () => {
     if (submitCount === 0) {
+      setFirstPwd(pwd);
       setConfirmMsg("비밀번호를 다시 입력해주세요.");
       setSubmitCount(1);
       setPwd("");
     } else {
-      navigate(`/walletconfirm`);
+      if (pwd === firstPwd) {
+        navigate(`/walletconfirm`);
+      } else {
+        setConfirmMsg("비밀번호가 일치하지 않습니다.\n처음부터 다시 설정해주세요.");
+        setSubmitCount(0);
+        setPwd("");
+        setFirstPwd("");
+      }
     }
   };
 

@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useEffect, useRef } from "react";
 // import { useEffect, useState } from "react";
 // import axios from "axios";
+import { isMobile } from "react-device-detect";
 
 const Container = styled.div`
   display: flex;
@@ -65,14 +66,30 @@ export default function WalletLogin() {
   const popupRef = useRef(null);
 
   const openPopup = () => {
-    popupRef.current = window.open("/KlipLogin", "_blank", "width=600,height=600");
+    if (isMobile) {
+      // 모바일의 경우 앱 바로가기
+      window.location.href = "kakaotalk://klipwallet";
+      // 앱이 설치돼 있지 않으면 스토어로 링크
+      setTimeout(() => {
+        const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+        if (/android/i.test(userAgent)) {
+          window.location.href =
+            "https://play.google.com/store/apps/details?id=com.klipwallet.app&pcampaignid=web_share";
+        } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+          window.location.href = "itms-apps://apps.apple.com/kr/app/%ED%81%B4%EB%A6%BD-klip/id1627665524";
+        }
+      }, 2000);
+    } else {
+      // PC의 경우 QR 팝업 띄움
+      popupRef.current = window.open("/KlipLogin", "_blank", "width=600,height=600");
 
-    const checkPopupClosed = setInterval(() => {
-      if (popupRef.current && popupRef.current.closed) {
-        clearInterval(checkPopupClosed);
-        window.location.href = "/WalletPwd";
-      }
-    }, 500);
+      const checkPopupClosed = setInterval(() => {
+        if (popupRef.current && popupRef.current.closed) {
+          clearInterval(checkPopupClosed);
+          window.location.href = "/WalletPwd";
+        }
+      }, 500);
+    }
   };
 
   useEffect(() => {
