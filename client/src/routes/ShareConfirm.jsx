@@ -9,7 +9,6 @@ const Container = styled.div`
   padding-top: 280px;
   overflow: hidden;
 `;
-
 const TextWrapper = styled.div`
   text-align: center;
   display: flex;
@@ -19,7 +18,6 @@ const TextWrapper = styled.div`
   gap: 5px;
   padding-bottom: 80px;
 `;
-
 const ConfirmBtn = styled.div`
   width: 340px;
   height: 40px;
@@ -33,19 +31,17 @@ const ConfirmBtn = styled.div`
   justify-content: center;
   align-items: center;
 `;
-
 const MainLink = styled(Link)`
   text-decoration: none;
   color: inherit;
 `;
 
-export default function WalletConfirm() {
+export default function ShareConfirm() {
   return (
     <>
       <Container>
         <TextWrapper>
-          <div>회원이 되신 걸 환영합니다!</div>
-          <div>지금 바로 서비스를 이용해 보세요.</div>
+          <div>전송이 완료되었습니다!</div>
         </TextWrapper>
         <MainLink to={`/Main`}>
           {" "}

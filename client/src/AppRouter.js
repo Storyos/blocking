@@ -8,6 +8,9 @@ import Main from "./routes/Main";
 import Profile from "./routes/settings/Profile";
 import Notification from "./routes/settings/Notification";
 import Settings from "./routes/settings/Settings";
+import Portfolio from "./routes/Portfolio";
+import Share from "./routes/Share";
+import ShareConfirm from "./routes/ShareConfirm";
 
 export default function AppRouter() {
   return (
@@ -52,6 +55,18 @@ export default function AppRouter() {
         <Route
           path="/KlipLogin"
           element={<KlipLogin />}
+        />
+        <Route
+          path="/Portfolio"
+          element={<Portfolio />}
+        />
+        <Route
+          path="/Share"
+          element={<Share />}
+        />
+        <Route
+          path="/ShareConfirm"
+          element={<ShareConfirm />}
         />
       </Routes>
     </BrowserRouter>

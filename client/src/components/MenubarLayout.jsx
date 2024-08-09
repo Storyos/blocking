@@ -38,16 +38,25 @@ const AddButton = styled(Button)`
 const MenubarLayout = () => {
   return (
     <Menubar>
-      <Button title="Home">
+      <Button
+        title="Home"
+        to={`/Main`}
+      >
         <BiHomeSmile />
       </Button>
-      <Button title="Document">
+      <Button
+        title="Document"
+        to={`/Portfolio`}
+      >
         <RiApps2AddLine />
       </Button>
       <AddButton title="Add">
         <IoIosAddCircle />
       </AddButton>
-      <Button title="Send">
+      <Button
+        title="Send"
+        to={"/Share"}
+      >
         <TbShieldShare />
       </Button>
       <Button
