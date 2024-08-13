@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useEffect, useRef } from "react";
 // import { useEffect, useState } from "react";
-// import axios from "axios";
+import axios from "axios";
 import { isMobile } from "react-device-detect";
 
 const Container = styled.div`
@@ -39,36 +39,16 @@ const LoginBtn = styled.button`
 `;
 
 export default function WalletLogin() {
-  // const [data, setData] = useState(null);
-  // const [loading, setLoading] = useState(true);
-  // const [error, setError] = useState(null);
-
-  // useEffect(() => {
-  //   axios
-  //     .get("http://localhost:3001/data")
-  //     .then((response) => {
-  //       setData(response.data);
-  //       setLoading(false);
-  //     })
-  //     .catch((err) => {
-  //       setError(err);
-  //       setLoading(false);
-  //     });
-  // }, []);
-
-  // if (loading) {
-  //   return <div>Loading..</div>;
-  // }
-  // if (error) {
-  //   return <div>Error: {errogit r.message}</div>;
-  // }
 
   const popupRef = useRef(null);
 
-  const openPopup = () => {
+  const openPopup = async () => {
     if (isMobile) {
       // 모바일의 경우 앱 바로가기
-      window.location.href = "kakaotalk://klipwallet";
+      // 이부분 Test할때 본인 ip로 변경필요
+      const response = await axios.get("http://192.168.25.60:4000/api/klip/prepareMobile");
+      console.log('response :>> ', response.data.deeplink);
+      window.location.href = response.data.deeplink;
       // 앱이 설치돼 있지 않으면 스토어로 링크
       setTimeout(() => {
         const userAgent = navigator.userAgent || navigator.vendor || window.opera;
@@ -107,7 +87,6 @@ export default function WalletLogin() {
           <div>부경 Portfoilo로</div>
           <div>쉽게 만드는</div>
           <div>나만의 서류 지갑</div>
-          {/* <div>{data.message}</div> */}
         </TextWrapper>
         <LoginBtn onClick={openPopup}>클립으로 간편 로그인</LoginBtn>
       </Container>
