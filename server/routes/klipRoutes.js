@@ -20,6 +20,18 @@ router.post('/prepare', async (req, res) => {
     }
 });
 
+router.get('/prepareMobile', async (req, res) => {
+    try {
+        const requestKey = await prepareKlipRequest();
+        const deeplink = `kakaotalk://klipwallet/open?url=https://klipwallet.com/?target=/a2a?request_key=${requestKey}`;
+        console.log(deeplink);
+        res.json({deeplink});
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Failed to prepare Klip request' });
+    }
+});
+
 // Klip API 결과 요청 엔드포인트
 router.get('/result/:requestKey', async (req, res) => {
     const { requestKey } = req.params;
