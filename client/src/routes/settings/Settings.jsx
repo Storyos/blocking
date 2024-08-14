@@ -89,7 +89,7 @@ export default function Settings() {
           <LinkText>Profile</LinkText>
           <FaChevronRight className="chevron" />
         </SettingsLink>
-        <SettingsLink to={`/Notification`}>
+        <SettingsLink to={`/Noti`}>
           <Icon>
             <FaBell />
           </Icon>

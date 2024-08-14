@@ -7,6 +7,7 @@ import Main from "./routes/Main";
 // import MenubarLayout from "./components/MenubarLayout";
 import Profile from "./routes/settings/Profile";
 import Notification from "./routes/settings/Notification";
+import Noti from "./routes/settings/Noti";
 import Settings from "./routes/settings/Settings";
 import Portfolio from "./routes/Portfolio";
 import Share from "./routes/Share";
@@ -45,12 +46,16 @@ export default function AppRouter() {
           element={<Settings />}
         />
         <Route
-          path="/Profile"
-          element={<Profile />}
+          path="/Portfolio"
+          element={<Portfolio />}
         />
         <Route
           path="/Notification"
           element={<Notification />}
+        />
+        <Route
+          path="/Noti"
+          element={<Noti />}
         />
         <Route
           path="/KlipLogin"
