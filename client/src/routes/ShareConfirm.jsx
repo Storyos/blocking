@@ -43,8 +43,7 @@ export default function ShareConfirm() {
         <TextWrapper>
           <div>전송이 완료되었습니다!</div>
         </TextWrapper>
-        <MainLink to={`/Main`}>
-          {" "}
+        <MainLink to={`/`}>
           <ConfirmBtn>확인</ConfirmBtn>
         </MainLink>
       </Container>
