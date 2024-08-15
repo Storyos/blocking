@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import MenubarLayout from "../../components/MenubarLayout";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import BackIcon from "../../components/BackIcon";
 import { FaUser, FaBell, FaLock, FaChevronRight, FaSignOutAlt } from "react-icons/fa";
+import { auth } from "../../firebase";
 
 const Container = styled.div`
   display: flex;
@@ -60,6 +61,7 @@ const LogOutContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  cursor: pointer;
 `;
 
 const LogOutIcon = styled(FaSignOutAlt)`
@@ -75,6 +77,14 @@ const LogOutText = styled.div`
 `;
 
 export default function Settings() {
+  const navigate = useNavigate();
+  const onLogOutClick = async () => {
+    const LogOutConfirm = window.confirm("로그아웃 하시겠습니까?");
+    if (LogOutConfirm) {
+      await auth.signOut();
+      navigate("/walletlogin");
+    }
+  };
   return (
     <Container>
       <Link to={`/Main`}>
@@ -104,7 +114,7 @@ export default function Settings() {
           <FaChevronRight className="chevron" />
         </SettingsLink>
       </LinkWrapper>
-      <LogOutContainer>
+      <LogOutContainer onClick={onLogOutClick}>
         <LogOutIcon />
         <LogOutText>로그아웃</LogOutText>
       </LogOutContainer>

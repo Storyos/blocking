@@ -1,5 +1,7 @@
+import { useEffect, useState } from "react";
 import AppRouter from "./AppRouter";
 import styled, { createGlobalStyle } from "styled-components";
+import { auth } from "./firebase";
 
 function App() {
   const GlobalStyle = createGlobalStyle`
@@ -73,12 +75,18 @@ body {
 	background-color: #f5f5f5; /* 박스 배경 색상 */
 }
  `;
+  const [isLoading, setLoading] = useState(true);
+  const init = async () => {
+    await auth.authStateReady(); // 로그인 여부 확인하고 인증이 완료되면 promise를 리턴
+    setLoading(false);
+  };
+  useEffect(() => {
+    init();
+  }, []);
   return (
     <>
       <GlobalStyle />
-      <div className="container">
-        <AppRouter />
-      </div>
+      <div className="container">{isLoading ? "Loading..." : <AppRouter />}</div>
     </>
   );
 }

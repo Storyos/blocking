@@ -40,7 +40,7 @@ const MenubarLayout = () => {
     <Menubar>
       <Button
         title="Home"
-        to={`/Main`}
+        to={`/`}
       >
         <BiHomeSmile />
       </Button>

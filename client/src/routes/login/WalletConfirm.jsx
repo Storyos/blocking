@@ -47,8 +47,7 @@ export default function WalletConfirm() {
           <div>회원이 되신 걸 환영합니다!</div>
           <div>지금 바로 서비스를 이용해 보세요.</div>
         </TextWrapper>
-        <MainLink to={`/Main`}>
-          {" "}
+        <MainLink to={`/`}>
           <ConfirmBtn>확인</ConfirmBtn>
         </MainLink>
       </Container>

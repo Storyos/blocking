@@ -4,6 +4,7 @@ import { FaUserCog, FaLock, FaTrash } from "react-icons/fa";
 import { RiArrowRightSLine } from "react-icons/ri";
 import MenubarLayout from "../../components/MenubarLayout";
 import BackIcon from "../../components/BackIcon";
+import { auth } from "../../firebase";
 
 const Container = styled.div`
   display: flex;
@@ -107,7 +108,7 @@ const Profile = () => {
       </ProfilePicContainer>
       <Name
         type="text"
-        placeholder="Your Name"
+        placeholder={auth.currentUser.displayName}
       />
       <LinkedAccountContainer>
         <ItemContainer>
@@ -115,7 +116,7 @@ const Profile = () => {
             <FaUserCog />
           </Icon>
           <Text>계정 관리</Text>
-          <Email>dsdf06@naver.com</Email>
+          <Email>{auth.currentUser.email}</Email>
           <RightArrowIcon />
         </ItemContainer>
         <ItemContainer>
