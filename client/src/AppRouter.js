@@ -14,6 +14,7 @@ import ShareConfirm from "./routes/ShareConfirm";
 import Login from "./routes/login/Login";
 import LoginConfirm from "./components/LoginConfirm";
 import SignUp from "./routes/login/SignUp";
+import SignUpAgree from"./routes/login/SignUpAgree";
 
 function Layout() {
   return (
@@ -95,6 +96,10 @@ export default function AppRouter() {
         <Route
           path="/signup"
           element={<SignUp />}
+        />
+        <Route
+          path="/signupagree" 
+          element={<SignUpAgree />}
         />
       </Routes>
     </BrowserRouter>
