@@ -84,6 +84,7 @@ router.get("/result/:requestKey", async (req, res) => {
         expiresIn: "1h",
       });
 
+      console.log("서버에서 주는값", token.json(), klaytnAddress.json());
       res.json({ token, address: klaytnAddress });
     } else {
       res.status(404).json({ error: "No result found" });
