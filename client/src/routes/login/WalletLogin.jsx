@@ -10,9 +10,10 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding-top: 140px;
+  padding-top: 70px;
   overflow: hidden;
 `;
+
 const TextWrapper = styled.div`
   width: 300px;
   display: flex;
@@ -22,8 +23,17 @@ const TextWrapper = styled.div`
   font-size: 28px;
   gap: 8px;
 `;
-const LoginBtn = styled.button`
-  width: 330px;
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px; /* 로그인 버튼과 회원가입 버튼 사이의 간격 */
+  margin-top: 300px;
+`;
+
+const Btn = styled.button`
+  width: 220px;
   height: 40px;
   border: none;
   border-radius: 10px;
@@ -31,12 +41,18 @@ const LoginBtn = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 300px;
   cursor: pointer;
 
   font-size: 14px;
   color: white;
-  font-weight: 500;
+
+  a {
+    color: white; /* a 태그의 글자색도 흰색으로 */
+    text-decoration: none;
+  }
+
+  &:hover {
+    background-color: #3ba9b1;
 `;
 
 export default function WalletLogin() {
@@ -81,18 +97,21 @@ export default function WalletLogin() {
   // }, []);
 
   return (
-    <>
-      <Container>
-        <TextWrapper>
-          <div>부경 Portfoilo로</div>
-          <div>쉽게 만드는</div>
-          <div>나만의 서류 지갑</div>
-        </TextWrapper>
-        <LoginBtn>
+    <Container>
+      <TextWrapper>
+        <div>부경 Portfoilo로</div>
+        <div>쉽게 만드는</div>
+        <div>나만의 서류 지갑</div>
+      </TextWrapper>
+
+      <ButtonWrapper>
+        <Btn>
           <Link to="/login">로그인하기</Link>
-        </LoginBtn>
-        <Link to="/signup">회원가입</Link>
-      </Container>
-    </>
+        </Btn>
+        <Btn>
+          <Link to="/signup">회원가입</Link>
+        </Btn>
+      </ButtonWrapper>
+    </Container>
   );
 }

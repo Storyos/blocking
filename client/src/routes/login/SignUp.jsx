@@ -4,18 +4,133 @@ import { FirebaseError } from "firebase/app";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { useForm } from "react-hook-form";
 import { auth, db } from "../../firebase";
-import axios from "axios";
 import { doc, setDoc } from "firebase/firestore";
+import styled from "styled-components";
 
+// Styled-components
+const SignUpContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f9f9f9;
+`;
+
+const Form = styled.form`
+  background-color: white;
+  padding: 50px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 450px;
+`;
+
+const Title = styled.h1`
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 2rem;
+`;
+
+const Input = styled.input`
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 2px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+
+  &:focus {
+    border-color: #50c2c9;
+    outline: none;
+  }
+
+  &:hover {
+    border-color: #b0e0e6;
+  }
+`;
+
+const Label = styled.label`
+  display: block;
+  margin-bottom: 10px;
+  font-weight: bold;
+`;
+
+const Select = styled.select`
+  padding: 10px;
+  margin-right: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  transition: border-color 0.3s;
+
+  &:focus {
+    border-color: #50c2c9;
+    outline: none;
+  }
+`;
+
+const Button = styled.button`
+  width: 100%;
+  padding: 10px;
+  background-color: #50c2c9;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #3ba9b1;
+  }
+
+  &:disabled {
+    background-color: #d0d0d0;
+    cursor: not-allowed;
+  }
+`;
+
+const ErrorMessage = styled.p`
+  color: red;
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid red;
+  border-radius: 5px;
+  background-color: #ffe6e6;
+`;
+
+const ConfirmationMessage = styled.span`
+  color: green;
+  font-weight: bold;
+  margin-left: 10px;
+`;
+
+const PasswordContainer = styled.div`
+  position: relative;
+  width: 100%;
+`;
+
+const EyeIcon = styled.span`
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+`;
+
+// SignUp component
 export default function SignUp() {
   const navigate = useNavigate();
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [isCodeSended, setIsCodeSended] = useState(false);
   const [emailConfirm, setEmailConfirm] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
   const { register, handleSubmit, watch } = useForm();
   const email = watch("email");
-  const confirmCode = watch("confirmCode");
 
   const years = Array.from({ length: 100 }, (_, i) => new Date().getFullYear() - i);
   const months = Array.from({ length: 12 }, (_, i) => i + 1);
@@ -36,7 +151,6 @@ export default function SignUp() {
     }
   };
 
-  // 이메일 전송
   const handleEmailCheck = async () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email) {
@@ -47,16 +161,13 @@ export default function SignUp() {
       alert("유효한 이메일 형식이 아닙니다.");
       return;
     }
-    // 인증코드 전송 로직
     setIsCodeSended(true);
   };
 
   const confirmCodeCheck = async () => {
-    // 인증코드 유효성 체크
     setEmailConfirm(true);
   };
 
-  // user 정보 저장
   const createUserDocument = async (user, data) => {
     try {
       const userDocRef = doc(db, "users", user.uid);
@@ -67,14 +178,11 @@ export default function SignUp() {
         birthDate: `${data.year}-${data.month}-${data.day}`,
         createdAt: new Date(),
       });
-      console.log("계정 doc 생성 완료");
     } catch (error) {
-      console.error("계정 생성 오류: ", error);
       throw error;
     }
   };
 
-  // 회원가입 버튼 클릭시 계정 생성
   const onSubmit = async (data) => {
     if (!emailConfirm) {
       alert("이메일 인증을 완료해 주세요.");
@@ -87,17 +195,14 @@ export default function SignUp() {
       setLoading(true);
       const credentials = await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(credentials.user, { displayName: name });
-      // 유저 정보 doc 생성
       await createUserDocument(credentials.user, data);
       navigate("/WalletPwd");
     } catch (e) {
       if (e instanceof FirebaseError) {
         setError(getErrorMessage(e.code));
-        // doc 생성중 오류가 발생하면 계정 다시 삭제
         if (auth.currentUser) {
           try {
             await auth.currentUser.delete();
-            console.log("계정 삭제 완료");
           } catch (deleteError) {
             console.error("계정 삭제 오류: ", deleteError);
           }
@@ -109,107 +214,94 @@ export default function SignUp() {
   };
 
   return (
-    <>
-      회원가입
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <input
-          {...register("name", { required: true })}
-          placeholder="이름"
-          type="text"
-        />
-        <input
-          {...register("studentNumber", { required: true })}
-          placeholder="학번"
-          type="number"
-        />
-        <div>
-          <label>생년월일</label>
-          <select {...register("year", { required: true })}>
+    <SignUpContainer>
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <Title>회원가입</Title>
+        <Label>이름</Label>
+        <Input {...register("name", { required: true })} placeholder="이름" type="text" />
+
+        <Label>학번</Label>
+        <Input {...register("studentNumber", { required: true })} placeholder="학번" type="number" />
+
+        <Label>생년월일</Label>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <Select {...register("year", { required: true })}>
             {years.map((year) => (
-              <option
-                key={year}
-                value={year}
-              >
+              <option key={year} value={year}>
                 {year}
               </option>
             ))}
-          </select>
-          <select {...register("month", { required: true })}>
+          </Select>
+          <Select {...register("month", { required: true })}>
             {months.map((month) => (
-              <option
-                key={month}
-                value={month}
-              >
+              <option key={month} value={month}>
                 {month}
               </option>
             ))}
-          </select>
-          <select {...register("day", { required: true })}>
+          </Select>
+          <Select {...register("day", { required: true })}>
             {days.map((day) => (
-              <option
-                key={day}
-                value={day}
-              >
+              <option key={day} value={day}>
                 {day}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
-        {/* 이메일 */}
-        <div>
-          <input
+
+        <Label>학교이메일 주소</Label>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <Input
             {...register("email", { required: true })}
             placeholder="학교이메일 주소"
             type="email"
             disabled={isCodeSended}
           />
           {isCodeSended ? (
-            "전송 완료"
+            <ConfirmationMessage>완료</ConfirmationMessage>
           ) : (
-            <button
-              type="button"
-              onClick={handleEmailCheck}
-            >
-              인증코드 전송
-            </button>
+            <Button type="button" onClick={handleEmailCheck}>
+              인증
+            </Button>
           )}
         </div>
-        {/* 인증코드 입력칸 */}
-        <div>
-          {isCodeSended ? (
-            <>
-              <input
+
+        {isCodeSended && (
+          <>
+            <Label>인증코드</Label>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <Input
                 {...register("confirmCode", { required: true })}
-                placeholder="인증코드 입력칸"
+                placeholder="인증코드 입력"
                 type="number"
                 disabled={emailConfirm}
               />
               {emailConfirm ? (
-                "인증코드 확인 완료"
+                <ConfirmationMessage>완료</ConfirmationMessage>
               ) : (
-                <button
-                  type="button"
-                  onClick={confirmCodeCheck}
-                >
-                  인증코드 확인
-                </button>
+                <Button type="button" onClick={confirmCodeCheck}>
+                  확인
+                </Button>
               )}
-            </>
-          ) : (
-            ""
-          )}
-        </div>
-        <input
-          {...register("password", { required: true })}
-          placeholder="비밀번호"
-          type="password"
-        />
-        <input
-          type="submit"
-          value={isLoading ? "Loading..." : "회원가입"}
-        />
-      </form>
-      {error && <p>{error}</p>}
-    </>
+            </div>
+          </>
+        )}
+
+        <Label>비밀번호</Label>
+        <PasswordContainer>
+          <Input
+            {...register("password", { required: true, minLength: 6 })}
+            placeholder="비밀번호"
+            type={showPassword ? "text" : "password"}
+          />
+          <EyeIcon onClick={() => setShowPassword(!showPassword)}>
+            {showPassword ? "👁️" : "👁️‍🗨️"}
+          </EyeIcon>
+        </PasswordContainer>
+        {error && <ErrorMessage>{error}</ErrorMessage>}
+        <Button type="submit" disabled={isLoading}>
+          {isLoading ? "로딩 중..." : "회원가입"}
+        </Button>
+      </Form>
+    </SignUpContainer>
   );
 }
