@@ -21,7 +21,8 @@ const Title = styled.h1`
 `;
 
 const BoxTitle = styled.h2`
-  font-size: 14px;
+  font-size: 12px;
+  font-weight: bold;
   color: #333;
   margin-bottom: 10px;
   text-align: left;
@@ -32,7 +33,7 @@ const BoxTitle = styled.h2`
 
   /* 아이콘 스타일 */
   .icon {
-    font-size: 22px;
+    font-size: 20px;
     color: #2098a1; 
     position: absolute;
     left: 0;
@@ -68,7 +69,7 @@ const TextBox = styled.div`
 `;
 
 const Text = styled.p`
-  font-size: 14px;
+  font-size: 12px;
   color: #666;
   line-height: 1.5;
   white-space: pre-wrap;
@@ -98,14 +99,32 @@ const Button = styled.button`
   border: none;
   border-radius: 10px;
   padding: 10px 20px;
-  font-size: 16px;
+  font-size: 13px;
   cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
   width: 42%;
 
   &:hover {
-    background-color: ${(props) => !props.disabled && (props.agree ? "#3ba9b1" : "#d32f2f")};
+    // background-color: #3ba9b1;
+    transform: translateY(-3px) scale(1.0); /* Scale effect on hover */
+  }
+
+  a {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+  }
+
+  svg {
+    margin-right: 8px;
+    font-size: 20px;
   }
 `;
+
+const StyledLabel = styled.label`
+  font-size: 12px; /* Adjust the font size as needed */
+  color: #333; /* Optional: change color if needed */
+`;
+
 
 const SignUpAgree = () => {
   const [isChecked, setIsChecked] = useState(false);
@@ -305,7 +324,7 @@ const SignUpAgree = () => {
           checked={isChecked}
           onChange={handleCheckboxChange}
         />
-        <label htmlFor="agree">약관에 동의합니다</label>
+        <StyledLabel htmlFor="agree">약관에 동의합니다</StyledLabel>
       </CheckboxContainer>
       <ButtonContainer>
         <Button agree onClick={handleAgree}>

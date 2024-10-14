@@ -91,10 +91,19 @@ const Button = styled.button`
 
   &:hover {
     background-color: #3ba9b1;
+    transform: translateY(-3px) scale(1.0); /* Scale effect on hover */
   }
 
-  &:disabled {
-    background-color: #a5a5a5;
+  a {
+    color: inherit;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+  }
+
+  svg {
+    margin-right: 8px;
+    font-size: 20px;
   }
 `;
 
