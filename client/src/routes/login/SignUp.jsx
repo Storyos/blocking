@@ -6,8 +6,10 @@ import { useForm } from "react-hook-form";
 import { auth, db } from "../../firebase";
 import { doc, setDoc } from "firebase/firestore";
 import styled from "styled-components";
+import { FaRegEye } from "react-icons/fa";
+import { RiEyeCloseFill } from "react-icons/ri";
+import { GiConfirmed } from "react-icons/gi";
 
-// Styled-components
 const SignUpContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -17,28 +19,28 @@ const SignUpContainer = styled.div`
 `;
 
 const Form = styled.form`
-  background-color: white;
-  padding: 50px;
-  border-radius: 10px;
-  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+  background-color: #f2f4f4;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 8px 15px rgba(35, 0, 77, 0.2);
   width: 100%;
-  max-width: 450px;
+  max-width: 480px;
 `;
 
 const Title = styled.h1`
   text-align: center;
   color: #333;
-  margin-bottom: 20px;
-  font-size: 2rem;
+  margin-bottom: 24px;
+  font-size: 23px;
 `;
 
 const Input = styled.input`
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 2px;
+  width: 93%;
+  padding: 11px;
+  margin-bottom: 12px;
   border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 1rem;
+  border-radius: 8px;
+  font-size: 11px;
   transition: border-color 0.3s;
 
   &:focus {
@@ -53,15 +55,17 @@ const Input = styled.input`
 
 const Label = styled.label`
   display: block;
-  margin-bottom: 10px;
-  font-weight: bold;
+  margin-bottom: 5px;
+  font-weight: 550;
+  color: #555;
+  font-size: 13px;
 `;
 
 const Select = styled.select`
-  padding: 10px;
-  margin-right: 20px;
+  padding: 12px;
+  margin-bottom: 14px;
   border: 1px solid #ddd;
-  border-radius: 5px;
+  border-radius: 8px;
   transition: border-color 0.3s;
 
   &:focus {
@@ -71,27 +75,50 @@ const Select = styled.select`
 `;
 
 const Button = styled.button`
-  width: 100%;
-  padding: 10px;
-  background-color: #50c2c9;
-  color: white;
-  font-weight: bold;
+  display: block;
+  width: 180px;
+  height: 40px;
   border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 10px;
-  transition: background-color 0.3s;
+  border-radius: 10px;
+  margin: 10px auto;
+  background-color: #50c2c9;
+  color: #fff;
+  font-weight: 600;
+  text-align: center;
+  transition: 0.3s;
 
   &:hover {
     background-color: #3ba9b1;
   }
 
   &:disabled {
-    background-color: #d0d0d0;
-    cursor: not-allowed;
+    background-color: #a5a5a5;
   }
 `;
 
+
+const ComfirmButton = styled.button`
+  width: 50px;
+  height: 35px;
+  border: none;
+  border-radius: 10px;
+  margin: 2px 2px 14px;
+  background-color: #50c2c9;
+  color: #fff;
+  font-weight: 500;
+  font-size: 12px;
+  text-align: center;
+  transition: 0.3s;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #3ba9b1;
+  }
+
+  &:disabled {
+    background-color: #a5a5a5;
+  }
+`;
 const ErrorMessage = styled.p`
   color: red;
   margin-top: 10px;
@@ -101,10 +128,9 @@ const ErrorMessage = styled.p`
   background-color: #ffe6e6;
 `;
 
-const ConfirmationMessage = styled.span`
-  color: green;
-  font-weight: bold;
-  margin-left: 10px;
+const ConfirmIcon = styled.span`
+  margin: 5px 5px 12px 7px;
+  color: #50c2c9; 
 `;
 
 const PasswordContainer = styled.div`
@@ -114,10 +140,28 @@ const PasswordContainer = styled.div`
 
 const EyeIcon = styled.span`
   position: absolute;
-  right: 10px;
-  top: 50%;
+  right: 5px;
+  top: 35%;
   transform: translateY(-50%);
   cursor: pointer;
+  color: #50c2c9;
+`;
+
+const EmailConfirmContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center; 
+  margin-bottom: 5px; 
+`;
+
+const SignInLink = styled.span`
+  color: #5f9ea0;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 12px;
+  text-align: center; /* Center the text */
+  display: block; /* Ensure it behaves like a block element */
+  margin-top: 10px; /* Add margin for spacing */
 `;
 
 // SignUp component
@@ -249,7 +293,7 @@ export default function SignUp() {
         </div>
 
         <Label>학교이메일 주소</Label>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <EmailConfirmContainer>
           <Input
             {...register("email", { required: true })}
             placeholder="학교이메일 주소"
@@ -257,18 +301,18 @@ export default function SignUp() {
             disabled={isCodeSended}
           />
           {isCodeSended ? (
-            <ConfirmationMessage>완료</ConfirmationMessage>
+            <ConfirmIcon><GiConfirmed/></ConfirmIcon>
           ) : (
-            <Button type="button" onClick={handleEmailCheck}>
+            <ComfirmButton type="button" onClick={handleEmailCheck}>
               인증
-            </Button>
+            </ComfirmButton>
           )}
-        </div>
+        </EmailConfirmContainer>
 
         {isCodeSended && (
           <>
             <Label>인증코드</Label>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <EmailConfirmContainer>
               <Input
                 {...register("confirmCode", { required: true })}
                 placeholder="인증코드 입력"
@@ -276,31 +320,55 @@ export default function SignUp() {
                 disabled={emailConfirm}
               />
               {emailConfirm ? (
-                <ConfirmationMessage>완료</ConfirmationMessage>
+                <ConfirmIcon><GiConfirmed/></ConfirmIcon>
               ) : (
-                <Button type="button" onClick={confirmCodeCheck}>
+                <ComfirmButton type="button" onClick={confirmCodeCheck}>
                   확인
-                </Button>
+                </ComfirmButton>
               )}
-            </div>
+            </EmailConfirmContainer>
           </>
         )}
 
         <Label>비밀번호</Label>
         <PasswordContainer>
           <Input
-            {...register("password", { required: true, minLength: 6 })}
+            {...register("password", { required: true })}
             placeholder="비밀번호"
             type={showPassword ? "text" : "password"}
           />
           <EyeIcon onClick={() => setShowPassword(!showPassword)}>
-            {showPassword ? "👁️" : "👁️‍🗨️"}
+          {showPassword ? (
+            <FaRegEye onClick={() => setShowPassword(false)} style={{ cursor: "pointer" }} />
+          ) : (
+            <RiEyeCloseFill onClick={() => setShowPassword(true)} style={{ cursor: "pointer" }} />
+          )}
           </EyeIcon>
         </PasswordContainer>
+
+        <Label>비밀번호 확인</Label>
+        <PasswordContainer>
+          <Input
+            {...register("passwordConfirm", { required: true })}
+            placeholder="비밀번호 확인"
+            type={showPasswordConfirm ? "text" : "password"}
+          />
+          <EyeIcon onClick={() => setShowPasswordConfirm(!showPasswordConfirm)}>
+          {showPasswordConfirm ? (
+            <FaRegEye onClick={() => setShowPasswordConfirm(false)} style={{ cursor: "pointer" }} />
+          ) : (
+            <RiEyeCloseFill onClick={() => setShowPasswordConfirm(true)} style={{ cursor: "pointer" }} />
+          )}
+          </EyeIcon>
+        </PasswordContainer>
+
         {error && <ErrorMessage>{error}</ErrorMessage>}
         <Button type="submit" disabled={isLoading}>
-          {isLoading ? "로딩 중..." : "회원가입"}
+          {isLoading ? "가입 중..." : "회원가입"}
         </Button>
+        <SignInLink onClick={() => navigate("/LogIn")}>
+          로그인
+        </SignInLink>
       </Form>
     </SignUpContainer>
   );
