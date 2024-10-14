@@ -24,7 +24,7 @@ const ImageContainer = styled.div`
   height: 100%;                // Optional: make sure it takes full height
   background: white;
   img {
-    max-width: 60%;
+    max-width: 35%;
     // height: auto;
   }
 `;
@@ -113,10 +113,19 @@ const SubmitButton = styled.input`
 
   &:hover {
     background-color: #3ba9b1;
+    transform: translateY(-3px) scale(1.0); /* Scale effect on hover */
   }
 
-  &:disabled {
-    background-color: #a5a5a5;
+  a {
+    color: inherit;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+  }
+
+  svg {
+    margin-right: 8px;
+    font-size: 20px;
   }
 `;
 
@@ -180,7 +189,7 @@ export default function Login() {
   return (
     <LoginContainer>
       <ImageContainer>
-        <img src="/img/login.jpg" alt="Login illustration" />
+        <img src="/img/encryption.gif" alt="Login" />
       </ImageContainer>
       <FormsContainer>
         <Form onSubmit={handleSubmit(onSubmit)} className="login__register" id="login-in">

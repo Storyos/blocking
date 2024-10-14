@@ -1,115 +1,180 @@
-import styled from "styled-components";
-import { useEffect, useRef } from "react";
-// import { useEffect, useState } from "react";
-import axios from "axios";
-import { isMobile } from "react-device-detect";
+import styled, { keyframes } from "styled-components";
 import { Link } from "react-router-dom";
+import { FaWallet, FaUser, FaUserPlus } from "react-icons/fa";
+import { useState } from "react";
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding-top: 70px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f2fbfb, #d5f0f2);
   overflow: hidden;
-`;
-
-const TextWrapper = styled.div`
-  width: 300px;
-  display: flex;
-  flex-direction: column;
-  text-align: left;
-  font-weight: bold;
-  font-size: 28px;
-  gap: 8px;
+  padding: 20px;
+  position: relative; /* Added for positioning the text bubbles */
 `;
 
 const ButtonWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px; /* 로그인 버튼과 회원가입 버튼 사이의 간격 */
-  margin-top: 300px;
+  gap: 16px;
+  margin-top: 50px;
 `;
 
 const Btn = styled.button`
-  width: 220px;
-  height: 40px;
+  width: 200px;
+  height: 45px;
   border: none;
-  border-radius: 10px;
+  border-radius: 15px;
   background-color: #50c2c9;
+  color: white;
+  font-size: 15px;
+  font-weight: 500;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-
-  font-size: 14px;
-  color: white;
-
-  a {
-    color: white; /* a 태그의 글자색도 흰색으로 */
-    text-decoration: none;
-  }
+  transition: all 0.3s ease;
+  position: relative;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
 
   &:hover {
     background-color: #3ba9b1;
+    transform: translateY(-3px) scale(1.0); /* Scale effect on hover */
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+  }
+
+  svg {
+    margin-right: 8px;
+    font-size: 20px;
+  }
+`;
+
+const IconWrapper = styled.div`
+  font-size: 50px;
+  color: #50c2c9;
+  margin-bottom: 240px;
+  animation: bounce 2.5s infinite;
+
+  @keyframes bounce {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+`;
+
+const bubbleAnimation = keyframes`
+  0% {
+    transform: translateY(100px);
+    opacity: 0;
+  }
+  30% {
+    transform: translateY(-10px); /* Move up slightly */
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(0);
+  }
+  70% {
+    transform: translateX(-5px); /* Slight left movement */
+  }
+  100% {
+    transform: translateX(5px); /* Slight right movement */
+  }
+`;
+
+const continuousMovement = keyframes`
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+`;
+
+const TextBubble = styled.div`
+  font-size: 20px;
+  color: #004d4d;
+  position: absolute;
+  animation: ${bubbleAnimation} 4s forwards, ${continuousMovement} 4s infinite; /* Continuous movement */
+  opacity: 1; /* Keep the opacity at 1 to ensure visibility */
+
+  /* Randomize the position for each text bubble */
+  left: ${({ left }) => left};
+  top: ${({ top }) => top};
+
+  /* Different font styles for each bubble */
+  ${({ index }) => {
+    switch (index) {
+      case 0:
+        return `font-family: 'Arial', sans-serif; font-weight: bold;`;
+      case 1:
+        return `font-family: 'Courier New', monospace; font-size: 15px;`;
+      case 2:
+        return `font-family: 'Georgia', serif; font-size: 18px;`;
+      case 3:
+        return `font-family: 'Verdana', sans-serif; font-weight: bold; font-size: 19px;`;
+      default:
+        return '';
+    }
+  }}
+
+  /* Staggering animation delay for each bubble */
+  animation-delay: ${({ index }) => index * 0.5}s; /* 0.5s delay for each subsequent bubble */
 `;
 
 export default function WalletLogin() {
-  // const popupRef = useRef(null);
+  const [scatter] = useState(true); // Start with scatter as true
 
-  // const openPopup = async () => {
-  //   if (isMobile) {
-  //     // 모바일의 경우 앱 바로가기
-  //     // 이부분 Test할때 본인 ip로 변경필요
-  //     const response = await axios.get("http://192.168.0.10:4000/api/klip/prepareMobile");
-  //     console.log("response :>> ", response.data.deeplink);
-  //     window.location.href = response.data.deeplink;
-  //     // 앱이 설치돼 있지 않으면 스토어로 링크
-  //     setTimeout(() => {
-  //       const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-  //       if (/android/i.test(userAgent)) {
-  //         window.location.href =
-  //           "https://play.google.com/store/apps/details?id=com.klipwallet.app&pcampaignid=web_share";
-  //       } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-  //         window.location.href = "itms-apps://apps.apple.com/kr/app/%ED%81%B4%EB%A6%BD-klip/id1627665524";
-  //       }
-  //     }, 2000);
-  //   } else {
-  //     // PC의 경우 QR 팝업 띄움
-  //     popupRef.current = window.open("/KlipLogin", "_blank", "width=600,height=600");
-
-  //     const checkPopupClosed = setInterval(() => {
-  //       if (popupRef.current && popupRef.current.closed) {
-  //         clearInterval(checkPopupClosed);
-  //         window.location.href = "/WalletPwd";
-  //       }
-  //     }, 500);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   return () => {
-  //     if (popupRef.current && !popupRef.current.closed) {
-  //       popupRef.current.close();
-  //     }
-  //   };
-  // }, []);
+  const bubblePositions = [
+    { left: "12%", top: "28%" },  // 1st bubble
+    { left: "55%", top: "38%" },  // 2nd bubble
+    { left: "25%", top: "48%" },  // 3rd bubble (편리하고 안전한)
+    { left: "48%", top: "60%" },  // 4th bubble
+  ];
 
   return (
     <Container>
-      <TextWrapper>
-        <div>부경 Portfoilo로</div>
-        <div>쉽게 만드는</div>
-        <div>나만의 서류 지갑</div>
-      </TextWrapper>
+      <IconWrapper>
+        <FaWallet />
+      </IconWrapper>
+
+      {/* Conditional rendering for text bubbles */}
+      {scatter && (
+        <>
+          {bubblePositions.map((position, index) => (
+            <TextBubble key={index} left={position.left} top={position.top} index={index}>
+              {index === 0 && "부경 Portfolio 를"}
+              {index === 1 && "쉽게 만드는"}
+              {index === 2 && "편리하고 안전한"}
+              {index === 3 && "나만의 서류 지갑"}
+            </TextBubble>
+          ))}
+        </>
+      )}
 
       <ButtonWrapper>
         <Btn>
-          <Link to="/login">로그인하기</Link>
+          <Link to="/login">
+            <FaUser /> 로그인
+          </Link>
         </Btn>
         <Btn>
-          <Link to="/signup">회원가입</Link>
+          <Link to="/signupagree">
+            <FaUserPlus /> 회원가입
+          </Link>
         </Btn>
       </ButtonWrapper>
     </Container>
