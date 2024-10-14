@@ -18,10 +18,10 @@ const LoginContainer = styled.div`
 `;
 
 const ImageContainer = styled.div`
-  display: flex;               // Add this to enable flexbox
-  justify-content: center;     // Center horizontally
-  align-items: center;         // Center vertically
-  height: 100%;                // Optional: make sure it takes full height
+  display: flex; // Add this to enable flexbox
+  justify-content: center; // Center horizontally
+  align-items: center; // Center vertically
+  height: 100%; // Optional: make sure it takes full height
   background: white;
   img {
     max-width: 60%;
@@ -110,6 +110,7 @@ const SubmitButton = styled.input`
   font-weight: 600;
   text-align: center;
   transition: 0.3s;
+  cursor: pointer;
 
   &:hover {
     background-color: #3ba9b1;
@@ -180,10 +181,17 @@ export default function Login() {
   return (
     <LoginContainer>
       <ImageContainer>
-        <img src="/img/login.jpg" alt="Login illustration" />
+        <img
+          src="/img/login.jpg"
+          alt="Login illustration"
+        />
       </ImageContainer>
       <FormsContainer>
-        <Form onSubmit={handleSubmit(onSubmit)} className="login__register" id="login-in">
+        <Form
+          onSubmit={handleSubmit(onSubmit)}
+          className="login__register"
+          id="login-in"
+        >
           <Title className="login__title">로그인</Title>
           <InputContainer className="login__box">
             <Icon>
@@ -210,11 +218,18 @@ export default function Login() {
           <ForgotPassword onClick={() => alert("비밀번호 복구 기능이 준비 중입니다.")}>
             비밀번호를 잊으셨나요?
           </ForgotPassword>
-          <SubmitButton type="submit" value={isLoading ? "로그인 중..." : "로그인"} disabled={isLoading} />
+          <SubmitButton
+            type="submit"
+            value={isLoading ? "로그인 중..." : "로그인"}
+            disabled={isLoading}
+          />
           {error && <ErrorMessage>{error}</ErrorMessage>}
           <div>
             <AccountMessage>계정이 없으신가요? </AccountMessage>
-            <SignInLink onClick={() => navigate("/signup")} id="SignUp">
+            <SignInLink
+              onClick={() => navigate("/signup")}
+              id="SignUp"
+            >
               회원가입
             </SignInLink>
           </div>
