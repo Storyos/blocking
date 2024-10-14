@@ -23,8 +23,6 @@ const Form = styled.form`
   padding: 40px;
   border-radius: 12px;
   box-shadow: 0 8px 15px rgba(35, 0, 77, 0.2);
-  animation-duration: 0.4s;
-  animation-name: animateLogin;
   width: 100%;
   max-width: 480px;
 `;
