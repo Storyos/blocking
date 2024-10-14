@@ -32,6 +32,7 @@ const Title = styled.h1`
   color: #333;
   margin-bottom: 24px;
   font-size: 23px;
+  font-weight: bold;
 `;
 
 const Input = styled.input`
@@ -86,6 +87,7 @@ const Button = styled.button`
   font-weight: 600;
   text-align: center;
   transition: 0.3s;
+  cursor: pointer;
 
   &:hover {
     background-color: #3ba9b1;
@@ -95,7 +97,6 @@ const Button = styled.button`
     background-color: #a5a5a5;
   }
 `;
-
 
 const ComfirmButton = styled.button`
   width: 50px;
@@ -130,7 +131,7 @@ const ErrorMessage = styled.p`
 
 const ConfirmIcon = styled.span`
   margin: 5px 5px 12px 7px;
-  color: #50c2c9; 
+  color: #50c2c9;
 `;
 
 const PasswordContainer = styled.div`
@@ -150,8 +151,8 @@ const EyeIcon = styled.span`
 const EmailConfirmContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center; 
-  margin-bottom: 5px; 
+  align-items: center;
+  margin-bottom: 5px;
 `;
 
 const SignInLink = styled.span`
@@ -262,30 +263,47 @@ export default function SignUp() {
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Title>회원가입</Title>
         <Label>이름</Label>
-        <Input {...register("name", { required: true })} placeholder="이름" type="text" />
+        <Input
+          {...register("name", { required: true })}
+          placeholder="이름"
+          type="text"
+        />
 
         <Label>학번</Label>
-        <Input {...register("studentNumber", { required: true })} placeholder="학번" type="number" />
+        <Input
+          {...register("studentNumber", { required: true })}
+          placeholder="학번"
+          type="number"
+        />
 
         <Label>생년월일</Label>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <Select {...register("year", { required: true })}>
             {years.map((year) => (
-              <option key={year} value={year}>
+              <option
+                key={year}
+                value={year}
+              >
                 {year}
               </option>
             ))}
           </Select>
           <Select {...register("month", { required: true })}>
             {months.map((month) => (
-              <option key={month} value={month}>
+              <option
+                key={month}
+                value={month}
+              >
                 {month}
               </option>
             ))}
           </Select>
           <Select {...register("day", { required: true })}>
             {days.map((day) => (
-              <option key={day} value={day}>
+              <option
+                key={day}
+                value={day}
+              >
                 {day}
               </option>
             ))}
@@ -301,9 +319,14 @@ export default function SignUp() {
             disabled={isCodeSended}
           />
           {isCodeSended ? (
-            <ConfirmIcon><GiConfirmed/></ConfirmIcon>
+            <ConfirmIcon>
+              <GiConfirmed />
+            </ConfirmIcon>
           ) : (
-            <ComfirmButton type="button" onClick={handleEmailCheck}>
+            <ComfirmButton
+              type="button"
+              onClick={handleEmailCheck}
+            >
               인증
             </ComfirmButton>
           )}
@@ -320,9 +343,14 @@ export default function SignUp() {
                 disabled={emailConfirm}
               />
               {emailConfirm ? (
-                <ConfirmIcon><GiConfirmed/></ConfirmIcon>
+                <ConfirmIcon>
+                  <GiConfirmed />
+                </ConfirmIcon>
               ) : (
-                <ComfirmButton type="button" onClick={confirmCodeCheck}>
+                <ComfirmButton
+                  type="button"
+                  onClick={confirmCodeCheck}
+                >
                   확인
                 </ComfirmButton>
               )}
@@ -338,11 +366,17 @@ export default function SignUp() {
             type={showPassword ? "text" : "password"}
           />
           <EyeIcon onClick={() => setShowPassword(!showPassword)}>
-          {showPassword ? (
-            <FaRegEye onClick={() => setShowPassword(false)} style={{ cursor: "pointer" }} />
-          ) : (
-            <RiEyeCloseFill onClick={() => setShowPassword(true)} style={{ cursor: "pointer" }} />
-          )}
+            {showPassword ? (
+              <FaRegEye
+                onClick={() => setShowPassword(false)}
+                style={{ cursor: "pointer" }}
+              />
+            ) : (
+              <RiEyeCloseFill
+                onClick={() => setShowPassword(true)}
+                style={{ cursor: "pointer" }}
+              />
+            )}
           </EyeIcon>
         </PasswordContainer>
 
@@ -354,21 +388,28 @@ export default function SignUp() {
             type={showPasswordConfirm ? "text" : "password"}
           />
           <EyeIcon onClick={() => setShowPasswordConfirm(!showPasswordConfirm)}>
-          {showPasswordConfirm ? (
-            <FaRegEye onClick={() => setShowPasswordConfirm(false)} style={{ cursor: "pointer" }} />
-          ) : (
-            <RiEyeCloseFill onClick={() => setShowPasswordConfirm(true)} style={{ cursor: "pointer" }} />
-          )}
+            {showPasswordConfirm ? (
+              <FaRegEye
+                onClick={() => setShowPasswordConfirm(false)}
+                style={{ cursor: "pointer" }}
+              />
+            ) : (
+              <RiEyeCloseFill
+                onClick={() => setShowPasswordConfirm(true)}
+                style={{ cursor: "pointer" }}
+              />
+            )}
           </EyeIcon>
         </PasswordContainer>
 
         {error && <ErrorMessage>{error}</ErrorMessage>}
-        <Button type="submit" disabled={isLoading}>
+        <Button
+          type="submit"
+          disabled={isLoading}
+        >
           {isLoading ? "가입 중..." : "회원가입"}
         </Button>
-        <SignInLink onClick={() => navigate("/LogIn")}>
-          로그인
-        </SignInLink>
+        <SignInLink onClick={() => navigate("/LogIn")}>로그인</SignInLink>
       </Form>
     </SignUpContainer>
   );

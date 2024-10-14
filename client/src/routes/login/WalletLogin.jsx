@@ -10,7 +10,7 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding-top: 70px;
+  padding-top: 150px;
   overflow: hidden;
 `;
 
@@ -29,11 +29,11 @@ const ButtonWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 10px; /* 로그인 버튼과 회원가입 버튼 사이의 간격 */
-  margin-top: 300px;
+  margin-top: 290px;
 `;
 
 const Btn = styled.button`
-  width: 220px;
+  width: 320px;
   height: 40px;
   border: none;
   border-radius: 10px;
@@ -43,8 +43,10 @@ const Btn = styled.button`
   align-items: center;
   cursor: pointer;
 
+  font-weight: bold;
   font-size: 14px;
   color: white;
+  transition: background-color 0.3s ease;
 
   a {
     color: white; /* a 태그의 글자색도 흰색으로 */
@@ -53,6 +55,7 @@ const Btn = styled.button`
 
   &:hover {
     background-color: #3ba9b1;
+  }
 `;
 
 export default function WalletLogin() {
