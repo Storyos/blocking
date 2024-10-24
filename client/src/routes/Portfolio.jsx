@@ -41,9 +41,9 @@ const Title = styled.h2`
   font-weight: bold;
   color: #333;
   margin-left: 0; /* 왼쪽에 붙이기 */
-  text-align: left; 
+  text-align: left;
   padding: 10px;
-  width: 100%; 
+  width: 100%;
 `;
 
 const GridContainer = styled.div`
@@ -118,14 +118,11 @@ const Portfolio = () => {
             </Card>
             <SbtContainer>
               Toeic
-              <LockIcon onClick={() => toggleLock(index)}>
-                {lockState[index] ? <FaLock /> : <FaLockOpen />}
-              </LockIcon>
+              <LockIcon onClick={() => toggleLock(index)}>{lockState[index] ? <FaLock /> : <FaLockOpen />}</LockIcon>
             </SbtContainer>
           </div>
         ))}
       </GridContainer>
-      <MenubarLayout />
     </Container>
   );
 };

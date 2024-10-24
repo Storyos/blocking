@@ -47,7 +47,7 @@ const ToggleButton = styled.button`
   height: 20px;
   border-radius: 15px;
   border: none;
-  background-color: ${props => (props.isOn ? "#50c2c9" : "#a2a2a2")};
+  background-color: ${(props) => (props.isOn ? "#50c2c9" : "#a2a2a2")};
   cursor: pointer;
   position: relative;
 
@@ -59,7 +59,7 @@ const ToggleButton = styled.button`
     border-radius: 50%;
     background-color: #ffffff;
     top: 50%;
-    left: ${props => (props.isOn ? "calc(100% - 20px)" : "5px")};
+    left: ${(props) => (props.isOn ? "calc(100% - 20px)" : "5px")};
     transform: translateY(-50%);
     transition: all 0.3s ease;
   }
@@ -71,15 +71,15 @@ export default function NotificationSettings() {
   const [isVibrationOn, setIsVibrationOn] = useState(true);
 
   const toggleNotification = () => {
-    setIsNotificationOn(prev => !prev);
+    setIsNotificationOn((prev) => !prev);
   };
 
   const toggleSound = () => {
-    setIsSoundOn(prev => !prev);
+    setIsSoundOn((prev) => !prev);
   };
 
   const toggleVibration = () => {
-    setIsVibrationOn(prev => !prev);
+    setIsVibrationOn((prev) => !prev);
   };
 
   return (
@@ -89,18 +89,26 @@ export default function NotificationSettings() {
       <OptionWrapper>
         <Option>
           <OptionText>알림 받기</OptionText>
-          <ToggleButton isOn={isNotificationOn} onClick={toggleNotification} />
+          <ToggleButton
+            isOn={isNotificationOn}
+            onClick={toggleNotification}
+          />
         </Option>
         <Option>
           <OptionText>소리</OptionText>
-          <ToggleButton isOn={isSoundOn} onClick={toggleSound} />
+          <ToggleButton
+            isOn={isSoundOn}
+            onClick={toggleSound}
+          />
         </Option>
         <Option>
           <OptionText>진동</OptionText>
-          <ToggleButton isOn={isVibrationOn} onClick={toggleVibration} />
+          <ToggleButton
+            isOn={isVibrationOn}
+            onClick={toggleVibration}
+          />
         </Option>
       </OptionWrapper>
-      <MenubarLayout />
     </Container>
   );
 }

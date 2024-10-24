@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { FaBell } from "react-icons/fa";
-import MenubarLayout from "../components/MenubarLayout";
+import { Link } from "react-router-dom";
+
 // 스타일링
 const Container = styled.div`
   display: flex;
@@ -9,6 +10,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   background-color: #f5f5f5;
+  width: 360px;
 `;
 
 const Header = styled.div`
@@ -19,7 +21,7 @@ const Header = styled.div`
   justify-content: center;
 `;
 
-const NotificationIcon = styled.div`
+const NotificationIcon = styled(Link)`
   position: absolute;
   right: 10px;
   top: 0px;
@@ -72,7 +74,7 @@ const Main = () => {
   return (
     <Container>
       <Header>
-        <NotificationIcon>
+        <NotificationIcon to="/Notification">
           <FaBell />
         </NotificationIcon>
       </Header>
@@ -83,7 +85,6 @@ const Main = () => {
         <Notification>Notification 2</Notification>
         <Notification>Notification 3</Notification>
       </GridContainer>
-      <MenubarLayout />
     </Container>
   );
 };

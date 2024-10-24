@@ -118,7 +118,6 @@ export default function Settings() {
         <LogOutIcon />
         <LogOutText>로그아웃</LogOutText>
       </LogOutContainer>
-      <MenubarLayout />
     </Container>
   );
 }
