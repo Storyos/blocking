@@ -131,7 +131,6 @@ const Profile = () => {
         <DeleteIcon />
         <DeleteText>Delete Account</DeleteText>
       </DeleteContainer>
-      <MenubarLayout />
     </Container>
   );
 };

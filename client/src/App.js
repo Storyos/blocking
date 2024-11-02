@@ -2,6 +2,15 @@ import { useEffect, useState } from "react";
 import AppRouter from "./AppRouter";
 import styled, { createGlobalStyle } from "styled-components";
 import { auth } from "./firebase";
+import { Loader } from "./components/Loader";
+
+const Container = styled.div`
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+`;
 
 function App() {
   const GlobalStyle = createGlobalStyle`
@@ -61,6 +70,7 @@ body {
 	width: 100vw;
 	height: 100vh;
 	background-color: white;
+	overflow: hidden;
 
 	// 폰트설정
 	font-family: "Noto Sans KR", sans-serif;
@@ -73,6 +83,7 @@ body {
 	width: 360px; /* 수정된 너비 */
 	height: 100vh;
 	background-color: #f5f5f5; /* 박스 배경 색상 */
+	overflow: hidden;
 }
  `;
   const [isLoading, setLoading] = useState(true);
@@ -86,7 +97,15 @@ body {
   return (
     <>
       <GlobalStyle />
-      <div className="container">{isLoading ? "Loading..." : <AppRouter />}</div>
+      <div className="container">
+        {isLoading ? (
+          <Container>
+            <Loader />
+          </Container>
+        ) : (
+          <AppRouter />
+        )}
+      </div>
     </>
   );
 }

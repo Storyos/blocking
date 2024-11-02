@@ -24,13 +24,14 @@ const Button = styled(Link)`
   font-size: 28px;
   cursor: pointer;
   text-align: center;
+  transition: 0.3s;
 
   &:hover {
     color: #50c2c9; /* 버튼 호버 색상 */
   }
 `;
 
-const AddButton = styled(Button)`
+const AddButton = styled(Link)`
   font-size: 50px;
   color: #50c2c9; /* Add 버튼 색상 */
 `;
@@ -50,7 +51,10 @@ const MenubarLayout = () => {
       >
         <RiApps2AddLine />
       </Button>
-      <AddButton title="Add">
+      <AddButton
+        title="Add"
+        to="/mintsbt"
+      >
         <IoIosAddCircle />
       </AddButton>
       <Button

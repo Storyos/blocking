@@ -60,7 +60,6 @@ export default function Share() {
           <IconText>QR코드</IconText>
         </IconWrapper>
       </ShareIcon>
-      <MenubarLayout />
     </Container>
   );
 }

@@ -169,7 +169,6 @@ const Notification = () => {
         ))}
       </NotificationList>
       <Time>Recent</Time>
-      <MenubarLayout />
     </Container>
   );
 };
