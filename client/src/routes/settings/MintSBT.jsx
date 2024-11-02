@@ -6,24 +6,81 @@ import axios from "axios";
 
 const Container = styled.div`
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  padding: 20px;
-  background-color: #f5f5f5;
+  height: 100vh;
+  background-color: #f9f9f9;
 `;
 
 const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
+  width: 100%;
+  max-width: 500px;
+  padding: 30px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
 `;
 
 const InputGroup = styled.div`
   display: flex;
   flex-direction: column;
+  label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 6px;
+  }
+  input,
+  select {
+    padding: 10px;
+    border: 1px solid #dcdcdc;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+    &:focus {
+      border-color: #50c2c9;
+      outline: none;
+    }
+  }
+  input[type="file"] {
+    padding: 6px;
+  }
 `;
 
-const SubmitButton = styled.button``;
+const SubmitButton = styled.button`
+  display: block;
+  width: 180px;
+  height: 40px;
+  border: none;
+  border-radius: 10px;
+  margin: 10px auto;
+  background-color: #50c2c9;
+  color: #fff;
+  font-weight: 600;
+  text-align: center;
+  transition: 0.3s;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #3ba9b1;
+    transform: translateY(-3px) scale(1.0); /* Scale effect on hover */
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+  }
+
+  svg {
+    margin-right: 8px;
+    font-size: 20px;
+  }
+`;
 
 export default function MintSBT() {
   const { register, handleSubmit } = useForm();
@@ -105,10 +162,7 @@ export default function MintSBT() {
             disabled={isLoading}
           />
         </InputGroup>
-        <SubmitButton
-          type="submit"
-          disabled={isLoading}
-        >
+        <SubmitButton type="submit" disabled={isLoading}>
           {isLoading ? "로딩 중..." : "발급하기"}
         </SubmitButton>
       </FormContainer>
