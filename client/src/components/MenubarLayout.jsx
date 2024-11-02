@@ -1,11 +1,11 @@
 // MenubarLayout.jsx
 import React from "react";
-import styled from "styled-components";
-import { BiHomeSmile, BiCog } from "react-icons/bi";
-import { RiApps2AddLine } from "react-icons/ri";
+import { BiCog, BiHomeSmile } from "react-icons/bi";
 import { IoIosAddCircle } from "react-icons/io";
+import { RiApps2AddLine } from "react-icons/ri";
 import { TbShieldShare } from "react-icons/tb";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
 
 const Menubar = styled.div`
   width: 320px;
@@ -50,7 +50,8 @@ const MenubarLayout = () => {
       >
         <RiApps2AddLine />
       </Button>
-      <AddButton title="Add">
+      <AddButton title="Add"
+      >
         <IoIosAddCircle />
       </AddButton>
       <Button

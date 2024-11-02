@@ -72,6 +72,8 @@ export default function AppRouter() {
           />
         </Route>
         {/* 아래 라우터들은 로그인하지 않고 볼 수 있는 페이지 */}
+
+        
         <Route
           path="/walletlogin"
           element={<WalletLogin />}

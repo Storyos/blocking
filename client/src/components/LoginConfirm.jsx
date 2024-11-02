@@ -4,6 +4,7 @@ import { auth } from "../firebase";
 
 export default function LoginConfirm({ children }) {
   const user = auth.currentUser;
+  console.log('user :>> ', user);
   if (user === null) {
     return <Navigate to="/login" />;
   }

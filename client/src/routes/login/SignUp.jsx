@@ -23,6 +23,8 @@ export default function SignUp() {
       navigate("/WalletPwd");
     } catch (e) {
       if (e instanceof FirebaseError) {
+        // auth/email-already-in-use : 이미 존재하는 이메일로 만드려고할때 ( alert등으로 막는거 필요
+        // auth/week-password : (6자리 이하로 비밀번호 작성시) 이거는 FE단에서 input못하게 막기.
         setError(e.message);
       }
     } finally {
