@@ -1,10 +1,13 @@
 {
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.685.0",
     "@walletconnect/web3wallet": "^1.12.3",
+    "aws-sdk": "^2.1691.0",
     "axios": "^1.7.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "formidable": "^3.5.2",
     "jsonwebtoken": "^9.0.2",
     "klip-sdk": "^2.2.1",
     "node": "^18.20.4",
