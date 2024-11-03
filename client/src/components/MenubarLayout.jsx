@@ -8,7 +8,7 @@ import { TbShieldShare } from "react-icons/tb";
 import { Link } from "react-router-dom";
 
 const Menubar = styled.div`
-  width: 320px;
+  width: 360px;
   display: flex;
   justify-content: space-around;
   align-items: center;

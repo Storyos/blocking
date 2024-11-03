@@ -42,7 +42,7 @@ const Btn = styled.button`
 
   &:hover {
     background-color: #3ba9b1;
-    transform: translateY(-3px) scale(1.0); /* Scale effect on hover */
+    transform: translateY(-3px) scale(1); /* Scale effect on hover */
   }
 
   a {
@@ -127,7 +127,7 @@ const TextBubble = styled.div`
       case 3:
         return `font-family: 'Verdana', sans-serif; font-weight: bold; font-size: 19px;`;
       default:
-        return '';
+        return "";
     }
   }}
 
@@ -139,10 +139,10 @@ export default function WalletLogin() {
   const [scatter] = useState(true); // Start with scatter as true
 
   const bubblePositions = [
-    { left: "12%", top: "28%" },  // 1st bubble
-    { left: "55%", top: "38%" },  // 2nd bubble
-    { left: "25%", top: "48%" },  // 3rd bubble (편리하고 안전한)
-    { left: "48%", top: "60%" },  // 4th bubble
+    { left: "12%", top: "28%" }, // 1st bubble
+    { left: "55%", top: "38%" }, // 2nd bubble
+    { left: "25%", top: "48%" }, // 3rd bubble (편리하고 안전한)
+    { left: "48%", top: "60%" }, // 4th bubble
   ];
 
   return (
@@ -155,7 +155,12 @@ export default function WalletLogin() {
       {scatter && (
         <>
           {bubblePositions.map((position, index) => (
-            <TextBubble key={index} left={position.left} top={position.top} index={index}>
+            <TextBubble
+              key={index}
+              left={position.left}
+              top={position.top}
+              index={index}
+            >
               {index === 0 && "부경 Portfolio 를"}
               {index === 1 && "쉽게 만드는"}
               {index === 2 && "편리하고 안전한"}
