@@ -233,7 +233,7 @@ export default function Login() {
           <div>
             <AccountMessage>계정이 없으신가요? </AccountMessage>
             <SignInLink
-              onClick={() => navigate("/signup")}
+              onClick={() => navigate("/signupagree")}
               id="SignUp"
             >
               회원가입
