@@ -139,7 +139,11 @@ const SignUpAgree = () => {
   };
 
   const handleDisagree = () => {
-    alert("약관에 동의해야 계속 진행할 수 있습니다.");
+    if (isChecked) {
+      navigate("/walletlogin"); // 동의 시 회원가입 페이지로 이동
+    } else {
+      alert("약관에 동의해야 계속 진행할 수 있습니다.");
+    }
   };
 
   const handleCheckboxChange = (e) => {
@@ -327,10 +331,10 @@ const SignUpAgree = () => {
         <StyledLabel htmlFor="agree">약관에 동의합니다</StyledLabel>
       </CheckboxContainer>
       <ButtonContainer>
+        <Button onClick={handleDisagree}>비동의</Button>
         <Button agree onClick={handleAgree}>
           동의
         </Button>
-        <Button onClick={handleDisagree}>비동의</Button>
       </ButtonContainer>
     </Container>
   );

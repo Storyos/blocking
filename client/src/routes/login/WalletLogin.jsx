@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { FaWallet, FaUser, FaUserPlus } from "react-icons/fa";
 import { useState } from "react";
 
+// Container for the main layout
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -12,9 +13,31 @@ const Container = styled.div`
   background: linear-gradient(135deg, #f2fbfb, #d5f0f2);
   overflow: hidden;
   padding: 20px;
-  position: relative; /* Added for positioning the text bubbles */
+  position: relative;
 `;
 
+// Animation for the floating SBT bubbles
+const floatAnimation = keyframes`
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+`;
+
+// SBT bubbles with slow movement and opacity effects
+const SBTBubble = styled.div`
+  position: absolute;
+  width: ${({ size }) => size}px;
+  height: ${({ size }) => size}px;
+  background-color: rgba(80, 194, 201, 0.3);
+  border-radius: 50%;
+  animation: ${floatAnimation} ${({ duration }) => duration}s ease-in-out infinite;
+  opacity: ${({ opacity }) => opacity};
+
+  /* Randomize position for a natural look */
+  top: ${({ top }) => top}%;
+  left: ${({ left }) => left}%;
+`;
+
+// Wrapper for login and sign up buttons
 const ButtonWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -23,6 +46,7 @@ const ButtonWrapper = styled.div`
   margin-top: 50px;
 `;
 
+// Individual button styles
 const Btn = styled.button`
   width: 200px;
   height: 45px;
@@ -42,7 +66,7 @@ const Btn = styled.button`
 
   &:hover {
     background-color: #3ba9b1;
-    transform: translateY(-3px) scale(1); /* Scale effect on hover */
+    transform: translateY(-3px);
   }
 
   a {
@@ -58,6 +82,7 @@ const Btn = styled.button`
   }
 `;
 
+// Main wallet icon styling
 const IconWrapper = styled.div`
   font-size: 50px;
   color: #50c2c9;
@@ -65,102 +90,90 @@ const IconWrapper = styled.div`
   animation: bounce 2.5s infinite;
 
   @keyframes bounce {
-    0%,
-    100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-10px);
-    }
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
   }
 `;
 
+// Text bubble animation for welcoming text
 const bubbleAnimation = keyframes`
-  0% {
-    transform: translateY(100px);
-    opacity: 0;
-  }
-  30% {
-    transform: translateY(-10px); /* Move up slightly */
-    opacity: 1;
-  }
-  50% {
-    transform: translateY(0);
-  }
-  70% {
-    transform: translateX(-5px); /* Slight left movement */
-  }
-  100% {
-    transform: translateX(5px); /* Slight right movement */
-  }
+  0% { transform: translateY(100px); opacity: 0; }
+  30% { transform: translateY(-10px); opacity: 1; }
+  50% { transform: translateY(0); }
+  70% { transform: translateX(-5px); }
+  100% { transform: translateX(5px); }
 `;
 
-const continuousMovement = keyframes`
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-5px);
-  }
-`;
-
+// Text bubbles for promotional phrases
 const TextBubble = styled.div`
   font-size: 20px;
   color: #004d4d;
   position: absolute;
-  animation: ${bubbleAnimation} 4s forwards, ${continuousMovement} 4s infinite; /* Continuous movement */
-  opacity: 1; /* Keep the opacity at 1 to ensure visibility */
-
-  /* Randomize the position for each text bubble */
+  animation: ${bubbleAnimation} 4s forwards ease-in-out;
   left: ${({ left }) => left};
   top: ${({ top }) => top};
+  animation-delay: ${({ index }) => index * 0.5}s;
 
-  /* Different font styles for each bubble */
   ${({ index }) => {
     switch (index) {
       case 0:
-        return `font-family: 'Arial', sans-serif; font-weight: bold;`;
+        return `font-weight: bold;`;
       case 1:
-        return `font-family: 'Courier New', monospace; font-size: 15px;`;
+        return `font-size: 15px;`;
       case 2:
-        return `font-family: 'Georgia', serif; font-size: 18px;`;
+        return `font-size: 18px;`;
       case 3:
-        return `font-family: 'Verdana', sans-serif; font-weight: bold; font-size: 19px;`;
+        return `font-weight: bold; font-size: 19px;`;
       default:
         return "";
     }
   }}
-
-  /* Staggering animation delay for each bubble */
-  animation-delay: ${({ index }) => index * 0.5}s; /* 0.5s delay for each subsequent bubble */
 `;
 
+// Main component
 export default function WalletLogin() {
-  const [scatter] = useState(true); // Start with scatter as true
+  const [scatter] = useState(true);
+
+  // Define positions and animations for each floating SBT bubble
+  const sbtBubbles = Array.from({ length: 8 }).map((_, index) => ({
+    size: Math.random() * 40 + 30, // Random size for each bubble
+    top: Math.random() * 80,       // Random position
+    left: Math.random() * 80,
+    duration: Math.random() * 5 + 5,  // Random animation duration
+    opacity: Math.random() * 0.3 + 0.3, // Random opacity for softness
+  }));
 
   const bubblePositions = [
-    { left: "12%", top: "28%" }, // 1st bubble
-    { left: "55%", top: "38%" }, // 2nd bubble
-    { left: "25%", top: "48%" }, // 3rd bubble (편리하고 안전한)
-    { left: "48%", top: "60%" }, // 4th bubble
+    { left: "12%", top: "28%" },
+    { left: "55%", top: "38%" },
+    { left: "25%", top: "48%" },
+    { left: "48%", top: "60%" },
   ];
 
   return (
     <Container>
+      {/* Floating SBT bubbles */}
+      {sbtBubbles.map((bubble, index) => (
+        <SBTBubble
+          key={index}
+          size={bubble.size}
+          top={bubble.top}
+          left={bubble.left}
+          duration={bubble.duration}
+          opacity={bubble.opacity}
+        />
+      ))}
+
+      {/* Wallet icon */}
       <IconWrapper>
         <FaWallet />
       </IconWrapper>
 
-      {/* Conditional rendering for text bubbles */}
+      {/* Text bubbles */}
       {scatter && (
         <>
           {bubblePositions.map((position, index) => (
-            <TextBubble
-              key={index}
-              left={position.left}
-              top={position.top}
-              index={index}
-            >
+            <TextBubble key={index} left={position.left} top={position.top} index={index}>
               {index === 0 && "부경 Portfolio 를"}
               {index === 1 && "쉽게 만드는"}
               {index === 2 && "편리하고 안전한"}
@@ -170,6 +183,7 @@ export default function WalletLogin() {
         </>
       )}
 
+      {/* Buttons */}
       <ButtonWrapper>
         <Btn>
           <Link to="/login">
