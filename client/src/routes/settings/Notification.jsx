@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { VscChevronDown, VscChevronUp } from "react-icons/vsc";
-import MenubarLayout from "../../components/MenubarLayout";
 import BackIcon from "../../components/BackIcon";
 
 // Notification 컴포넌트를 위한 메인 컨테이너
@@ -11,7 +10,6 @@ const Container = styled.div`
   align-items: center;
   padding: 20px;
   position: relative;
-  background-color: #f5f5f5;
   padding-left: 20px;
   padding-right: 20px;
 `;

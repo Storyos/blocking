@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { FaBell, FaCertificate, FaLock, FaLockOpen } from "react-icons/fa"; // 아이콘 불러오기
-import MenubarLayout from "../components/MenubarLayout";
+import NotifyIcon from "../components/NotifyIcon";
 
 // 스타일링
 const Container = styled.div`
@@ -9,7 +9,6 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  background-color: #f5f5f5;
 `;
 
 const Header = styled.div`
@@ -18,22 +17,6 @@ const Header = styled.div`
   padding: 10px;
   display: flex;
   justify-content: center;
-`;
-
-const NotificationIcon = styled.div`
-  position: absolute;
-  right: 10px;
-  top: 0px;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #50c2c9;
-  font-size: 20px;
-  font-weight: bold;
-  cursor: pointer;
 `;
 
 const Title = styled.h2`
@@ -104,9 +87,7 @@ const Portfolio = () => {
     <Container>
       <Header>
         <Title>자격증</Title>
-        <NotificationIcon>
-          <FaBell />
-        </NotificationIcon>
+        <NotifyIcon />
       </Header>
       <GridContainer>
         {[...Array(6)].map((_, index) => (

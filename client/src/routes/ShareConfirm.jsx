@@ -14,12 +14,14 @@ const TextWrapper = styled.div`
   display: flex;
   flex-direction: column;
   text-align: left;
-  width: 310px;
+  width: 90vw;
+  max-width: 550px;
   gap: 5px;
   padding-bottom: 80px;
 `;
 const ConfirmBtn = styled.div`
-  width: 340px;
+  width: 90vw;
+  max-width: 550px;
   height: 40px;
   border: 0px;
   border-radius: 10px;

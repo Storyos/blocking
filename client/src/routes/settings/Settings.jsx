@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import MenubarLayout from "../../components/MenubarLayout";
 import { Link, useNavigate } from "react-router-dom";
 import BackIcon from "../../components/BackIcon";
 import { FaUser, FaBell, FaLock, FaChevronRight, FaSignOutAlt } from "react-icons/fa";
@@ -11,7 +10,6 @@ const Container = styled.div`
   align-items: center;
   padding: 10px;
   position: relative;
-  background-color: #f5f5f5;
 `;
 
 const Title = styled.h2`
@@ -21,7 +19,7 @@ const Title = styled.h2`
 `;
 
 const LinkWrapper = styled.div`
-  width: 300px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -99,13 +97,13 @@ export default function Settings() {
           <LinkText>Profile</LinkText>
           <FaChevronRight className="chevron" />
         </SettingsLink>
-        <SettingsLink to={`/Noti`}>
+        {/* <SettingsLink to={`/Noti`}>
           <Icon>
             <FaBell />
           </Icon>
           <LinkText>알림</LinkText>
           <FaChevronRight className="chevron" />
-        </SettingsLink>
+        </SettingsLink> */}
         <SettingsLink>
           <Icon>
             <FaLock />

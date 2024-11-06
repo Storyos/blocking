@@ -4,7 +4,26 @@ import styled, { createGlobalStyle } from "styled-components";
 import { auth } from "./firebase";
 import { Loader } from "./components/Loader";
 
+// 전체 화면
+const PageContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.05);
+`;
+
+// 앱 화면
 const Container = styled.div`
+  /* 박스의 너비와 높이 설정 */
+  width: 100vw;
+  max-width: 600px; // 최대 width는 600이고, 그 이하에선 화면 너비에 맞춤
+  height: 100vh;
+  background-color: white; /* 박스 배경 색상 */
+  overflow: hidden;
+`;
+
+const LoaderContainer = styled.div`
   display: flex;
   width: 100%;
   height: 100%;
@@ -78,13 +97,6 @@ body {
 	font-weight: 400;
   	font-style: normal;
 }
-.container {
-	/* 박스의 너비와 높이 설정 */
-	width: 360px; /* 수정된 너비 */
-	height: 100vh;
-	background-color: #f5f5f5; /* 박스 배경 색상 */
-	overflow: hidden;
-}
  `;
   const [isLoading, setLoading] = useState(true);
   const init = async () => {
@@ -95,18 +107,18 @@ body {
     init();
   }, []);
   return (
-    <>
+    <PageContainer>
       <GlobalStyle />
-      <div className="container">
+      <Container>
         {isLoading ? (
-          <Container>
+          <LoaderContainer>
             <Loader />
-          </Container>
+          </LoaderContainer>
         ) : (
           <AppRouter />
         )}
-      </div>
-    </>
+      </Container>
+    </PageContainer>
   );
 }
 
