@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import MenubarLayout from "../components/MenubarLayout";
 import { FaQrcode } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
@@ -9,7 +8,6 @@ const Container = styled.div`
   align-items: center;
   padding: 20px;
   position: relative;
-  background-color: #f5f5f5;
 `;
 
 const ShareIcon = styled.div`

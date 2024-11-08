@@ -3,7 +3,8 @@ import styled from "styled-components";
 import { FaBell } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Calendar from "react-calendar";
-import 'react-calendar/dist/Calendar.css';
+import "react-calendar/dist/Calendar.css";
+import NotifyIcon from "../components/NotifyIcon";
 
 // 스타일링
 const Container = styled.div`
@@ -11,19 +12,17 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #f5f5f5;
-  width: 360px;
   border-radius: 16px;
   padding: 20px;
-  font-family: 'Montserrat', sans-serif; // 글꼴 설정
+  font-family: "Montserrat", sans-serif; // 글꼴 설정
 `;
 
 const Header = styled.div`
+  position: relative;
   width: 100%;
+  padding: 10px;
   display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  margin-bottom: 20px;
+  justify-content: center;
 `;
 
 const IconButton = styled.div`
@@ -44,6 +43,8 @@ const CalendarContainer = styled.div`
   padding: 20px;
   border-radius: 16px;
   margin: 20px 0;
+  display: flex;
+  justify-content: center;
 
   /* react-calendar 스타일 조정 */
   .react-calendar {
@@ -68,7 +69,7 @@ const CalendarContainer = styled.div`
   .react-calendar__navigation__label {
     color: #50c2c9; /* 제목 색상 변경 */
     font-size: 15px; /* 제목 글자 크기 */
-    font-weight: normal; 
+    font-weight: normal;
   }
 
   .react-calendar__month-view__weekdays {
@@ -87,7 +88,7 @@ const NotificationContainer = styled.div`
   font-size: 16px; /* 공지 글자 크기 */
   color: #333;
   text-align: left;
-  font-family: 'Montserrat', sans-serif; // 글꼴 추가
+  font-family: "Montserrat", sans-serif; // 글꼴 추가
 `;
 
 const RedDot = styled.span`
@@ -104,7 +105,7 @@ const RedDot = styled.span`
 const Main = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [notes] = useState({
-    "6": "오늘 수영 제부대회날입니다."
+    6: "오늘 수영 제부대회날입니다.",
   });
 
   const handleDateChange = (date) => {
@@ -113,7 +114,7 @@ const Main = () => {
 
   const tileContent = ({ date, view }) => {
     // view가 month인 경우에만 점 표시, 6일에만 점 추가
-    if (view === 'month' && date.getDate() === 6) {
+    if (view === "month" && date.getDate() === 6) {
       return <RedDot />;
     }
   };
@@ -121,9 +122,7 @@ const Main = () => {
   return (
     <Container>
       <Header>
-        <IconButton as={Link} to="/Notification">
-          <FaBell />
-        </IconButton>
+        <NotifyIcon />
       </Header>
 
       <CalendarContainer>

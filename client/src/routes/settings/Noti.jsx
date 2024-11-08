@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { FaChevronLeft } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import BackIcon from "../../components/BackIcon";
-import MenubarLayout from "../../components/MenubarLayout";
 
 const Container = styled.div`
   display: flex;
@@ -11,7 +10,6 @@ const Container = styled.div`
   align-items: center;
   padding: 20px;
   position: relative;
-  background-color: #f5f5f5;
 `;
 
 const Title = styled.h2`

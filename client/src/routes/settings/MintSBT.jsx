@@ -1,15 +1,14 @@
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
-import MenubarLayout from "../../components/MenubarLayout";
 import { useState } from "react";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #f9f9f9;
 `;
 
 const FormContainer = styled.form`
@@ -66,25 +65,16 @@ const SubmitButton = styled.button`
 
   &:hover {
     background-color: #3ba9b1;
-    transform: translateY(-3px) scale(1.0); /* Scale effect on hover */
-  }
-
-  a {
-    color: inherit;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-  }
-
-  svg {
-    margin-right: 8px;
-    font-size: 20px;
+    transform: translateY(-3px) scale(1);
   }
 `;
 
 export default function MintSBT() {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, reset } = useForm();
   const [isLoading, setIsLoading] = useState(false);
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const menuValue = queryParams.get("menu");
 
   const onSubmit = async (data) => {
     setIsLoading(true);
@@ -95,15 +85,68 @@ export default function MintSBT() {
     formData.append("university", data.university);
     formData.append("status", data.status);
     formData.append("photo", data.photo[0]);
+    formData.append("type", menuValue);
 
     try {
       console.log(formData);
       const response = await axios.post("/api/url작성", formData);
       console.log("Response:", response.data);
+      reset();
     } catch (error) {
       console.error(error);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const renderStatusOptions = () => {
+    switch (menuValue) {
+      case "동아리":
+        return (
+          <>
+            <option value="">선택</option>
+            <option value="해커톤 수상내역">해커톤 수상내역</option>
+            <option value="동아리 활동내역">동아리 활동내역</option>
+            <option value="임원직/직책">임원직/직책</option>
+          </>
+        );
+      case "증명서":
+        return (
+          <>
+            <option value="">선택</option>
+            <option value="재학증명서">재학증명서</option>
+            <option value="졸업증명서">졸업증명서</option>
+          </>
+        );
+      case "비교과 프로그램":
+        return (
+          <>
+            <option value="비교과 프로그램">비교과 프로그램</option>
+          </>
+        );
+      case "학생회":
+        return (
+          <>
+            <option value="학생회 활동내역">학생회 활동내역</option>
+          </>
+        );
+      default:
+        return <option value="">선택</option>;
+    }
+  };
+
+  const renderStatusLabel = () => {
+    switch (menuValue) {
+      case "동아리":
+        return "동아리 활동 내용";
+      case "증명서":
+        return "재학/졸업증명서";
+      case "비교과 프로그램":
+        return "비교과 프로그램";
+      case "학생회":
+        return "학생회 활동 내용 선택";
+      default:
+        return "증명서 종류";
     }
   };
 
@@ -141,16 +184,13 @@ export default function MintSBT() {
           />
         </InputGroup>
         <InputGroup>
-          <label htmlFor="status">재학/졸업/학위 여부</label>
+          <label htmlFor="status">{renderStatusLabel()}</label>
           <select
             {...register("status", { required: true })}
             id="status"
             disabled={isLoading}
           >
-            <option value="">선택</option>
-            <option value="재학">재학</option>
-            <option value="졸업">졸업</option>
-            <option value="학위">학위</option>
+            {renderStatusOptions()}
           </select>
         </InputGroup>
         <InputGroup>
@@ -162,7 +202,10 @@ export default function MintSBT() {
             disabled={isLoading}
           />
         </InputGroup>
-        <SubmitButton type="submit" disabled={isLoading}>
+        <SubmitButton
+          type="submit"
+          disabled={isLoading}
+        >
           {isLoading ? "로딩 중..." : "발급하기"}
         </SubmitButton>
       </FormContainer>

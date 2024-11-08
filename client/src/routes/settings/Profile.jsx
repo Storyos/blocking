@@ -1,8 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import { FaUserCog, FaLock, FaTrash } from "react-icons/fa";
+import { FaUserCog, FaLock, FaTrash, FaUser } from "react-icons/fa";
 import { RiArrowRightSLine } from "react-icons/ri";
-import MenubarLayout from "../../components/MenubarLayout";
 import BackIcon from "../../components/BackIcon";
 import { auth } from "../../firebase";
 
@@ -12,7 +11,6 @@ const Container = styled.div`
   align-items: center;
   padding: 20px;
   position: relative;
-  background-color: #f5f5f5;
 `;
 
 const ProfilePicContainer = styled.div`
@@ -20,7 +18,7 @@ const ProfilePicContainer = styled.div`
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  background-color: #ccc;
+  background-color: #e6e6e6;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -33,15 +31,14 @@ const ProfilePic = styled.img`
   object-fit: cover;
 `;
 
-const Name = styled.input`
+const Name = styled.h1`
+  width: 25%;
   margin-top: 20px;
   padding: 8px;
   font-size: 18px;
-  border: none; /* 테두리 제거 */
+  font-weight: bold;
   border-bottom: 1px solid #ddd; /* 밑줄 추가 */
   text-align: center;
-  background-color: transparent; /* 배경색 투명으로 설정 */
-  outline: none; /* 포커스 시 외곽선 제거 */
 `;
 
 const LinkedAccountContainer = styled.div`
@@ -101,15 +98,16 @@ const Profile = () => {
     <Container>
       <BackIcon />
       <ProfilePicContainer>
-        <ProfilePic
+        {/* <ProfilePic
           src="https://via.placeholder.com/120"
           alt="Profile"
+        /> */}
+        <FaUser
+          size={40}
+          color="#50c2c9"
         />
       </ProfilePicContainer>
-      <Name
-        type="text"
-        placeholder={auth.currentUser.displayName}
-      />
+      <Name>{auth.currentUser.displayName}</Name>
       <LinkedAccountContainer>
         <ItemContainer>
           <Icon>
@@ -127,10 +125,10 @@ const Profile = () => {
           <RightArrowIcon />
         </ItemContainer>
       </LinkedAccountContainer>
-      <DeleteContainer>
+      {/* <DeleteContainer>
         <DeleteIcon />
         <DeleteText>Delete Account</DeleteText>
-      </DeleteContainer>
+      </DeleteContainer> */}
     </Container>
   );
 };
