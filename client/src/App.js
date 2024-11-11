@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import AppRouter from "./AppRouter";
 import styled, { createGlobalStyle } from "styled-components";
-import { auth } from "./firebase";
+import AppRouter from "./AppRouter";
 import { Loader } from "./components/Loader";
+import { auth } from "./firebase";
+import { WalletProvider } from "./WalletContext";
 
 // 전체 화면
 const PageContainer = styled.div`
@@ -107,18 +108,20 @@ body {
     init();
   }, []);
   return (
-    <PageContainer>
-      <GlobalStyle />
-      <Container>
-        {isLoading ? (
-          <LoaderContainer>
-            <Loader />
-          </LoaderContainer>
-        ) : (
-          <AppRouter />
-        )}
-      </Container>
-    </PageContainer>
+    <WalletProvider>
+      <PageContainer>
+        <GlobalStyle />
+        <Container>
+          {isLoading ? (
+            <LoaderContainer>
+              <Loader />
+            </LoaderContainer>
+          ) : (
+            <AppRouter />
+          )}
+        </Container>
+      </PageContainer>
+    </WalletProvider>
   );
 }
 

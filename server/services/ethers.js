@@ -20,5 +20,19 @@ async function mintSBT(recipentAddress, tokenId) {
   }
 }
 
+async function getTokenBalance(address, contractAddress) {
+  const contract = new ehters.Contract(contractAddress, sbtABI, provider);
+
+  const balance = await contract.balanceOf(address);
+  console.log(`주소 ${address}의 토큰 수: ${balance.toString()}`);
+
+  const tokenIds = [];
+  for (let i = 0; i < balance; i++) {
+    const tokenId = await contract.tokenOfOwnerByIndex(address, i);
+    tokenIds.push(tokenId.toString());
+  }
+  console.log("토큰 ID 목록:", tokenIds);
+}
+
 const klipAddress = "KLIP_WALLET_ADDRESS_RECEIVED_FROM_API";
 mintSBT(klipAddress, 1);
