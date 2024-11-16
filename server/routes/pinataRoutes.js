@@ -1,7 +1,7 @@
 const axios = require("axios");
 const express = require("express");
 const router = express.Router();
-const { fetchDataFromPinata } = require("../services/pinata");
+const { fetchDataFromPinata,UploadDataToPinata } = require("../services/pinata");
 
 // /datafromPinata 경로에서 데이터를 가져오는 엔드포인트 정의
 router.get("/datafromPinata", async (req, res) => {
@@ -17,6 +17,17 @@ router.get("/datafromPinata", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to fetch data from Pinata" });
+  }
+});
+
+
+router.post('/postDatatoPinata', async (req, res) => {
+  const formData = req.body;
+  try {
+    const pinataResponse = await UploadDataToPinata(formData);
+    res.status(200).json({ success: true, data: pinataResponse });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error uploading data to Pinata', error: error.message });
   }
 });
 module.exports = router;

@@ -26,5 +26,39 @@ const fetchDataFromPinata = async (cid) => {
   }
 };
 
+const UploadDataToPinata = async (formData) => {
+  console.log("업로드 요청 들어옴");
+  const pinataApiKey = process.env.PINATA_API_KEY;
+  const pinataSecretApiKey = process.env.PINATA_API_SECRET;
+  const pinataUrl = 'https://api.pinata.cloud/pinning/pinJSONToIPFS';
+
+  const body = {
+    pinataMetadata: {
+      name: formData.name,
+    },
+    pinataContent: {
+      studentId: formData.studentId,
+      university: formData.university,
+      status: formData.status,
+    },
+  };
+
+  try {
+    const response = await axios.post(pinataUrl, body, {
+      headers: {
+        'Content-Type': 'application/json',
+        pinata_api_key: pinataApiKey,
+        pinata_secret_api_key: pinataSecretApiKey,
+      },
+    });
+
+    console.log('Pinata Response:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Error uploading to Pinata:', error);
+    throw error;
+  }
+};
+
 // CommonJS 방식으로 함수 내보내기
-module.exports = { fetchDataFromPinata };
+module.exports = { fetchDataFromPinata,UploadDataToPinata };
