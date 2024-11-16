@@ -77,19 +77,10 @@ export default function MintSBT() {
   const menuValue = queryParams.get("menu");
 
   const onSubmit = async (data) => {
+    console.log(data);
     setIsLoading(true);
-
-    const formData = new FormData();
-    formData.append("name", data.name);
-    formData.append("studentId", data.studentId);
-    formData.append("university", data.university);
-    formData.append("status", data.status);
-    formData.append("photo", data.photo[0]);
-    formData.append("type", menuValue);
-
     try {
-      console.log(formData);
-      const response = await axios.post("/api/url작성", formData);
+      const response = await axios.post("http://localhost:4000/api/sbt/postDatatoPinata", data);
       console.log("Response:", response.data);
       reset();
     } catch (error) {
@@ -193,15 +184,7 @@ export default function MintSBT() {
             {renderStatusOptions()}
           </select>
         </InputGroup>
-        <InputGroup>
-          <label htmlFor="photo">사진 업로드</label>
-          <input
-            {...register("photo", { required: true })}
-            type="file"
-            id="photo"
-            disabled={isLoading}
-          />
-        </InputGroup>
+
         <SubmitButton
           type="submit"
           disabled={isLoading}
