@@ -70,6 +70,7 @@ router.post("/verifyemail", async (req, res) => {
     res.status(500).json({ error: "Failed to send verification email" });
   }
 });
+
 // Klip API 결과 요청 엔드포인트
 router.get("/result/:requestKey", async (req, res) => {
   const { requestKey } = req.params;
