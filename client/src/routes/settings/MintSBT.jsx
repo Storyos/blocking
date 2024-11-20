@@ -9,55 +9,93 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
+  background-color: #f9f9f9;
 `;
 
 const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
   width: 100%;
-  max-width: 500px;
-  padding: 30px;
-  background-color: #ffffff;
+  max-width: 480px;
+  padding: 30px 5px ;
   border-radius: 12px;
-  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  box-shadow: 1px 1px rgba(86, 204, 212, 0.5);
 `;
+
+// const Title = styled.h2`
+//   text-align: center;
+//   font-size: 25px;
+//   font-weight: 700;
+//   color: #333;
+//   margin-bottom: 8px;
+//   margin-top: 15px;
+// `;
 
 const InputGroup = styled.div`
   display: flex;
   flex-direction: column;
+  padding-left: 30px; 
+  padding-right: 30px; 
+
   label {
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 600;
     color: #333;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
   }
+
   input,
   select {
-    padding: 10px;
+    padding: 12px;
     border: 1px solid #dcdcdc;
     border-radius: 8px;
     font-size: 14px;
-    transition: border-color 0.3s;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background-color: #fefefe;
+
     &:focus {
       border-color: #50c2c9;
       outline: none;
+      box-shadow: 0 0 4px rgba(80, 194, 201, 0.5);
     }
   }
+
   input[type="file"] {
-    padding: 6px;
+    padding: 8px;
   }
+`;
+const Logo1 = styled.img`
+  width: 200px;
+  height: auto;
+  margin: 0 auto;
+  display: block;
+  position: relative; /* 부모 요소로 위치를 상대적으로 설정 */
+`;
+
+const Logo = styled.img`
+  width: 50px;
+  height: auto;
+  margin: 0 auto;
+  display: block;
+  position: absolute;
+  top: 160px;  /* 위치를 조정하여 Logo1 위로 올리기 */
+  left: 55%;   /* 수평으로 가운데 정렬 */
+  transform: translateX(-50%) rotate(45deg); /* 75도 회전 */
 `;
 
 const SubmitButton = styled.button`
   display: block;
   width: 180px;
-  height: 40px;
+  height: 44px;
   border: none;
-  border-radius: 10px;
-  margin: 10px auto;
+  border-radius: 8px;
+  margin: 0 auto;
   background-color: #50c2c9;
   color: #fff;
+  font-size: 16px;
   font-weight: 600;
   text-align: center;
   transition: 0.3s;
@@ -65,7 +103,12 @@ const SubmitButton = styled.button`
 
   &:hover {
     background-color: #3ba9b1;
-    transform: translateY(-3px) scale(1);
+    transform: translateY(-3px);
+  }
+
+  &:disabled {
+    background-color: #a0d8dc;
+    cursor: not-allowed;
   }
 `;
 
@@ -144,6 +187,9 @@ export default function MintSBT() {
   return (
     <Container>
       <FormContainer onSubmit={handleSubmit(onSubmit)}>
+        {/* <Title>SBT 발급</Title> */}
+        <Logo src={`/img/Logo.gif`} alt="PKNU Logo" />
+        <Logo1 src={`/img/pknuLogo.png`} alt="PKNU Logo" />
         <InputGroup>
           <label htmlFor="name">이름</label>
           <input
@@ -161,16 +207,6 @@ export default function MintSBT() {
             placeholder="학번"
             type="text"
             id="studentId"
-            disabled={isLoading}
-          />
-        </InputGroup>
-        <InputGroup>
-          <label htmlFor="university">대학교</label>
-          <input
-            {...register("university", { required: true })}
-            placeholder="대학교"
-            type="text"
-            id="university"
             disabled={isLoading}
           />
         </InputGroup>

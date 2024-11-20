@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import BackIcon from "../../components/BackIcon";
-import { FaUser, FaBell, FaLock, FaChevronRight, FaSignOutAlt } from "react-icons/fa";
+import { FaUser, FaBell, FaLock, FaChevronRight, FaSignOutAlt, FaWallet } from "react-icons/fa";
 import { auth } from "../../firebase";
 
 const Container = styled.div`
@@ -30,7 +30,7 @@ const SettingsLink = styled(Link)`
   align-items: center;
   text-decoration: none;
   color: inherit;
-  padding: 10px 15px;
+  padding: 10px 60px;
 
   & > .chevron {
     color: #a2a2a2;
@@ -47,11 +47,30 @@ const Icon = styled.div`
   width: 40px;
   height: 40px;
   margin-right: 15px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 5px #A2A2A2;
 `;
 
 const LinkText = styled.span`
   flex-grow: 1;
+`;
+
+const WalletButton = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #50c2c9;
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  margin-top: 20px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+
+  &:hover {
+    background-color: #3aa3b0;
+  }
 `;
 
 const LogOutContainer = styled.div`
@@ -83,6 +102,11 @@ export default function Settings() {
       navigate("/walletlogin");
     }
   };
+
+  const onWalletConnect = () => {
+    alert("지갑 연동 기능은 현재 구현 중입니다.");
+  };
+
   return (
     <Container>
       <Link to={`/Main`}>
@@ -112,6 +136,10 @@ export default function Settings() {
           <FaChevronRight className="chevron" />
         </SettingsLink>
       </LinkWrapper>
+      <WalletButton onClick={onWalletConnect}>
+        <FaWallet style={{ marginRight: "10px" }} />
+        지갑 연동
+      </WalletButton>
       <LogOutContainer onClick={onLogOutClick}>
         <LogOutIcon />
         <LogOutText>로그아웃</LogOutText>

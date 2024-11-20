@@ -25,18 +25,6 @@ const Header = styled.div`
   justify-content: center;
 `;
 
-const IconButton = styled.div`
-  cursor: pointer;
-  color: #50c2c9; /* 연한 파란색 */
-  font-size: 28px; /* 아이콘 크기 조정 */
-  margin-right: 20px;
-  transition: color 0.3s;
-
-  &:hover {
-    color: #00796b; /* Hover 시 색상 변화 */
-  }
-`;
-
 const CalendarContainer = styled.div`
   width: 100%;
   background-color: white;
