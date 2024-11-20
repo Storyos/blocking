@@ -34,7 +34,6 @@ const LoaderContainer = styled.div`
 
 function App() {
   const GlobalStyle = createGlobalStyle`
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap');
   // style 초기화
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -79,8 +78,15 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
-	
+
+@font-face {
+  font-family: "Noto Sans KR";
+  src: url("/fonts/NotoSansKR-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
 body {
+  font-family: "Noto Sans KR";
 	/* 화면을 중앙에 배치하기 위한 스타일 */
 	margin: 0;
 	padding: 0;
@@ -91,12 +97,6 @@ body {
 	height: 100vh;
 	background-color: white;
 	overflow: hidden;
-
-	// 폰트설정
-	font-family: "Noto Sans KR", sans-serif;
-	font-optical-sizing: auto;
-	font-weight: 400;
-  	font-style: normal;
 }
  `;
   const [isLoading, setLoading] = useState(true);

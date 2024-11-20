@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { FaBell } from "react-icons/fa";
-import { Link } from "react-router-dom";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
 import NotifyIcon from "../components/NotifyIcon";
+import CalendarComponent from "../components/Calendar";
 
 // 스타일링
 const Container = styled.div`
@@ -14,7 +11,6 @@ const Container = styled.div`
   justify-content: center;
   border-radius: 16px;
   padding: 20px;
-  font-family: "Montserrat", sans-serif; // 글꼴 설정
 `;
 
 const Header = styled.div`
@@ -25,68 +21,18 @@ const Header = styled.div`
   justify-content: center;
 `;
 
-const CalendarContainer = styled.div`
-  width: 100%;
-  background-color: white;
-  padding: 20px;
-  border-radius: 16px;
-  margin: 20px 0;
-  display: flex;
-  justify-content: center;
-
-  /* react-calendar 스타일 조정 */
-  .react-calendar {
-    border: none; /* 달력 테두리 제거 */
-  }
-
-  .react-calendar__tile {
-    border: none; /* 타일의 테두리 제거 */
-    font-size: 12px; /* 날짜 글자 크기 */
-  }
-
-  .react-calendar__tile--active {
-    background-color: #50c2c9; /* 선택된 날짜 스타일 */
-    color: white; /* 글자색 변경 */
-  }
-
-  .react-calendar__tile:hover {
-    background-color: #e0f7fa; /* Hover 시 색상 변화 */
-    color: #00796b; /* Hover 시 글자색 변화 */
-  }
-
-  .react-calendar__navigation__label {
-    color: #50c2c9; /* 제목 색상 변경 */
-    font-size: 15px; /* 제목 글자 크기 */
-    font-weight: normal;
-  }
-
-  .react-calendar__month-view__weekdays {
-    font-weight: normal;
-    color: #888; /* 요일 색상 */
-    font-size: 13px; /* 요일 글자 크기 */
-  }
-`;
-
 const NotificationContainer = styled.div`
   background-color: #ffeb3b;
   padding: 15px;
   border-radius: 8px;
   width: 90%;
-  margin-top: 20px;
   font-size: 16px; /* 공지 글자 크기 */
   color: #333;
   text-align: left;
-  font-family: "Montserrat", sans-serif; // 글꼴 추가
-`;
-
-const RedDot = styled.span`
-  display: block;
-  width: 5px;
-  height: 5px;
-  background-color: red;
-  border-radius: 50%;
-  margin: 0 auto;
-  margin-top: 2px;
+  @media (min-width: 600px) {
+    width: 70%;
+    margin-top: 10px;
+  }
 `;
 
 // Main 컴포넌트
@@ -100,27 +46,16 @@ const Main = () => {
     setSelectedDate(date);
   };
 
-  const tileContent = ({ date, view }) => {
-    // view가 month인 경우에만 점 표시, 6일에만 점 추가
-    if (view === "month" && date.getDate() === 6) {
-      return <RedDot />;
-    }
-  };
-
   return (
     <Container>
       <Header>
         <NotifyIcon />
       </Header>
 
-      <CalendarContainer>
-        <Calendar
-          onChange={handleDateChange}
-          value={selectedDate}
-          formatDay={(locale, date) => date.getDate().toString()} // '일' 제거
-          tileContent={tileContent} // 특정 날짜에 빨간 점 추가
-        />
-      </CalendarContainer>
+      <CalendarComponent
+        selectedDate={selectedDate}
+        handleDateChange={handleDateChange}
+      />
 
       {selectedDate.getDate() === 6 && (
         <NotificationContainer>

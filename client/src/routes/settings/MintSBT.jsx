@@ -18,7 +18,7 @@ const FormContainer = styled.form`
   gap: 24px;
   width: 100%;
   max-width: 480px;
-  padding: 30px 5px ;
+  padding: 30px 5px;
   border-radius: 12px;
   background-color: #ffffff;
   border: 1px solid #ddd;
@@ -37,8 +37,8 @@ const FormContainer = styled.form`
 const InputGroup = styled.div`
   display: flex;
   flex-direction: column;
-  padding-left: 30px; 
-  padding-right: 30px; 
+  padding-left: 30px;
+  padding-right: 30px;
 
   label {
     font-size: 16px;
@@ -81,8 +81,8 @@ const Logo = styled.img`
   margin: 0 auto;
   display: block;
   position: absolute;
-  top: 160px;  /* 위치를 조정하여 Logo1 위로 올리기 */
-  left: 55%;   /* 수평으로 가운데 정렬 */
+  top: 160px; /* 위치를 조정하여 Logo1 위로 올리기 */
+  left: 55%; /* 수평으로 가운데 정렬 */
   transform: translateX(-50%) rotate(45deg); /* 75도 회전 */
 `;
 
@@ -188,8 +188,11 @@ export default function MintSBT() {
     <Container>
       <FormContainer onSubmit={handleSubmit(onSubmit)}>
         {/* <Title>SBT 발급</Title> */}
-        <Logo src={`/img/Logo.gif`} alt="PKNU Logo" />
-        <Logo1 src={`/img/pknuLogo.png`} alt="PKNU Logo" />
+        {/* <Logo src={`/img/Logo.gif`} alt="PKNU Logo" /> */}
+        <Logo1
+          src={`/img/pknuLogo.png`}
+          alt="PKNU Logo"
+        />
         <InputGroup>
           <label htmlFor="name">이름</label>
           <input
