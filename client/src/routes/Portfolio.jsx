@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { FaBell, FaCertificate, FaLock, FaLockOpen } from "react-icons/fa"; // 아이콘 불러오기
+import { FaCertificate, FaLock, FaLockOpen } from "react-icons/fa"; // 아이콘 불러오기
 import NotifyIcon from "../components/NotifyIcon";
 
 // 스타일링
@@ -9,8 +9,10 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  padding-left: 60px; 
-  padding-right: 60px;
+  @media (min-width: 600px) {
+    padding-left: 60px;
+    padding-right: 60px;
+  }
 `;
 
 const Header = styled.div`

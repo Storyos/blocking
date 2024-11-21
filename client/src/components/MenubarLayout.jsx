@@ -16,6 +16,7 @@ const Menubar = styled.div`
   position: fixed;
   bottom: 0;
   margin-bottom: 5px;
+  z-index: 10;
 `;
 
 const Button = styled(Link)`
@@ -51,6 +52,7 @@ const DropdownMenu = styled.div`
   flex-direction: column;
   width: 200px;
   padding: 10px 0;
+  z-index: 10;
 `;
 
 const DropdownItem = styled.div`
@@ -92,14 +94,23 @@ export default function MenubarLayout() {
 
   return (
     <Menubar>
-      <Button title="Home" to={`/`}>
+      <Button
+        title="Home"
+        to={`/`}
+      >
         <BiHomeSmile />
       </Button>
-      <Button title="Document" to={`/Portfolio`}>
+      <Button
+        title="Document"
+        to={`/Portfolio`}
+      >
         <RiApps2AddLine />
       </Button>
 
-      <AddButton onClick={handleAddButtonClick} title="Add">
+      <AddButton
+        onClick={handleAddButtonClick}
+        title="Add"
+      >
         <IoIosAddCircle />
         {isDropdownOpen && (
           <DropdownMenu>
@@ -123,10 +134,16 @@ export default function MenubarLayout() {
         )}
       </AddButton>
 
-      <Button title="Send" to={"/Share"}>
+      <Button
+        title="Send"
+        to={"/Share"}
+      >
         <TbShieldShare />
       </Button>
-      <Button title="Settings" to={`/Settings`}>
+      <Button
+        title="Settings"
+        to={`/Settings`}
+      >
         <BiCog />
       </Button>
     </Menubar>

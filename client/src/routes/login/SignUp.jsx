@@ -91,7 +91,7 @@ const Button = styled.button`
 
   &:hover {
     background-color: #3ba9b1;
-    transform: translateY(-3px) scale(1.0); /* Scale effect on hover */
+    transform: translateY(-3px) scale(1); /* Scale effect on hover */
   }
 
   a {
@@ -250,7 +250,7 @@ export default function SignUp() {
       const credentials = await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(credentials.user, { displayName: name });
       await createUserDocument(credentials.user, data);
-      navigate("/WalletPwd");
+      navigate("/walletconfirm");
     } catch (e) {
       if (e instanceof FirebaseError) {
         setError(getErrorMessage(e.code));
