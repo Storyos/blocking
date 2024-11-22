@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import BackIcon from "../../components/BackIcon";
-import { FaUser, FaBell, FaLock, FaChevronRight, FaSignOutAlt, FaWallet } from "react-icons/fa";
+import { FaUser, FaLock, FaChevronRight, FaSignOutAlt, FaWallet } from "react-icons/fa";
 import { auth } from "../../firebase";
 
 const Container = styled.div`
@@ -47,7 +47,7 @@ const Icon = styled.div`
   width: 40px;
   height: 40px;
   margin-right: 15px;
-  box-shadow: 0 1px 5px #A2A2A2;
+  box-shadow: 0 1px 5px #a2a2a2;
 `;
 
 const LinkText = styled.span`

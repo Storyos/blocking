@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import NotifyIcon from "../components/NotifyIcon";
+import CalendarComponent from "../components/Calendar";
 
 // 스타일링
 const Container = styled.div`
