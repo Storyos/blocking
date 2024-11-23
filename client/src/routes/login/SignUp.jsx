@@ -91,7 +91,7 @@ const Button = styled.button`
 
   &:hover {
     background-color: #3ba9b1;
-    transform: translateY(-3px) scale(1); /* Scale effect on hover */
+    transform: translateY(-3px) scale(1.0); /* Scale effect on hover */
   }
 
   a {
