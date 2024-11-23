@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import styled from "styled-components";
+import axios from "axios"; // Axios 사용
+import React, { useEffect, useState } from "react";
 import { FaCertificate, FaLock, FaLockOpen } from "react-icons/fa"; // 아이콘 불러오기
+import styled from "styled-components";
 import NotifyIcon from "../components/NotifyIcon";
 
 // 스타일링
@@ -79,13 +80,40 @@ const LockIcon = styled.div`
 `;
 
 const Portfolio = () => {
-  const [lockState, setLockState] = useState([true, true, true, true, true, true]);
+  const [lockState, setLockState] = useState([]);
+  const [sbtData, setSbtData] = useState([]); // SBT 데이터를 저장할 상태
+  const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
+
+  const fetchSBTs = async () => {
+    try {
+      const userAddress = "0x4EE06b1E5c7468f9521699D349CbF8c2610BF92c"; // MetaMask에서 가져올 수 있음
+      const response = await axios.get(
+        `http://localhost:4000/api/sbtmint/getSBTData?userAddress=${userAddress}`
+      );
+      console.log("SBT 조회 결과:", response.data);
+      const sbtDetails = response.data.sbtDetails;
+      setSbtData(sbtDetails); // SBT 데이터를 상태에 저장
+      setLockState(sbtDetails.map(() => true)); // 초기 lockState는 모두 잠금 상태
+      setIsLoading(false); // 로딩 완료
+    } catch (error) {
+      console.error("SBT 조회 실패:", error);
+      setIsLoading(false); // 로딩 완료
+    }
+  };
+
+  useEffect(() => {
+    fetchSBTs();
+  }, []);
 
   const toggleLock = (index) => {
     const newLockState = [...lockState];
     newLockState[index] = !newLockState[index];
     setLockState(newLockState);
   };
+
+  if (isLoading) {
+    return <div>로딩 중...</div>; // 로딩 화면 표시
+  }
 
   return (
     <Container>
@@ -94,16 +122,19 @@ const Portfolio = () => {
         <NotifyIcon />
       </Header>
       <GridContainer>
-        {[...Array(6)].map((_, index) => (
-          <div key={index}>
+        {sbtData.map((sbt, index) => (
+          <div key={sbt.tokenId}>
             <Card>
               <FaCertificate />
-              <h3>자격증 {index + 1}</h3>
-              <p>자격증 설명</p>
+              <h3>{sbt.metadata.status || `자격증 ${index + 1}`}</h3>
+              <p>{`학번: ${sbt.metadata.studentId}`}</p>
+              <p>{`학교: ${sbt.metadata.university}`}</p>
             </Card>
             <SbtContainer>
-              Toeic
-              <LockIcon onClick={() => toggleLock(index)}>{lockState[index] ? <FaLock /> : <FaLockOpen />}</LockIcon>
+              {`Token ID: ${sbt.tokenId}`}
+              <LockIcon onClick={() => toggleLock(index)}>
+                {lockState[index] ? <FaLock /> : <FaLockOpen />}
+              </LockIcon>
             </SbtContainer>
           </div>
         ))}

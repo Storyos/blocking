@@ -1,8 +1,8 @@
-import styled from "styled-components";
-import { useForm } from "react-hook-form";
-import { useState } from "react";
 import axios from "axios";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useLocation } from "react-router-dom";
+import styled from "styled-components";
 
 const Container = styled.div`
   display: flex;
@@ -118,20 +118,47 @@ export default function MintSBT() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const menuValue = queryParams.get("menu");
-
   const onSubmit = async (data) => {
     console.log(data);
     setIsLoading(true);
+  
     try {
-      const response = await axios.post("http://localhost:4000/api/sbt/postDatatoPinata", data);
-      console.log("Response:", response.data);
-      reset();
+      // Pinata에 데이터 업로드
+      const pinataResponse = await axios.post(
+        `http://localhost:4000/api/sbt/uploadToPinata`,
+        {
+          name: data.name,
+          studentId: data.studentId,
+          university: "Pukyong University",
+          status: data.status,
+        }
+      );
+  
+      if (!pinataResponse.data?.data?.IpfsHash) {
+        throw new Error("Pinata에서 IPFS 해시를 반환하지 못했습니다.");
+      }
+  
+      console.log("Pinata 업로드 성공:", pinataResponse.data.data.IpfsHash);
+  
+      // SBT 발급 요청
+      const mintResponse = await axios.post(`http://localhost:4000/api/sbtmint/mintSBT`, {
+        recipientAddress: "0x4EE06b1E5c7468f9521699D349CbF8c2610BF92c", // 수령인의 Ethereum 주소
+        sbtType: 0, // SBT 타입 (enum, 예: 0 = CLUB_ACTIVITY)
+        name: data.name, // 이름
+        studentId: data.studentId, // 학번
+        ipfsUrl: pinataResponse.data.data.IpfsHash, // Pinata에서 반환된 IPFS Hash
+      });
+  
+      console.log("SBT 발급 성공:", mintResponse.data);
+      alert("SBT 발급이 완료되었습니다!");
     } catch (error) {
-      console.error(error);
+      console.error("오류 발생:", error);
+      alert(`오류가 발생했습니다: ${error.message}`);
     } finally {
       setIsLoading(false);
     }
   };
+  
 
   const renderStatusOptions = () => {
     switch (menuValue) {
