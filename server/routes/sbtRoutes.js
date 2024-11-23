@@ -1,13 +1,12 @@
-require('dotenv').config();
-const express = require('express');
+require("dotenv").config();
+const express = require("express");
 const router = express.Router();
-const { mintSBT } = require('../services/ethers');
+const { mintSBT, getSBTDataFromEvents } = require("../services/ethers"); // getSBTData 추가
 
 // SBT 발급 라우트
 router.post("/mintSBT", async (req, res) => {
   const { recipientAddress, sbtType, name, studentId, ipfsUrl } = req.body;
 
-  // 입력값 검증
   if (!recipientAddress || sbtType === undefined || !name || !studentId || !ipfsUrl) {
     return res.status(400).json({
       success: false,
@@ -15,15 +14,7 @@ router.post("/mintSBT", async (req, res) => {
     });
   }
 
-  console.log("SBT 발급 요청 정보:");
-  console.log("Recipient Address:", recipientAddress);
-  console.log("SBT Type:", sbtType);
-  console.log("Name:", name);
-  console.log("Student ID:", studentId);
-  console.log("IPFS URL:", ipfsUrl);
-
   try {
-    // mintSBT 함수 호출
     const transactionHash = await mintSBT(recipientAddress, sbtType, name, studentId, ipfsUrl);
     res.status(200).json({
       success: true,
@@ -39,5 +30,31 @@ router.post("/mintSBT", async (req, res) => {
   }
 });
 
+// SBT 조회 라우트
+router.get("/getSBTData", async (req, res) => {
+  const userAddress = req.query.userAddress;
+
+  if (!userAddress) {
+    return res.status(400).json({
+      success: false,
+      message: "userAddress가 필요합니다.",
+    });
+  }
+
+  try {
+    const sbtDetails = await getSBTDataFromEvents(userAddress);
+    res.status(200).json({
+      success: true,
+      sbtDetails,
+    });
+  } catch (error) {
+    console.error("Error fetching SBT data from events:", error);
+    res.status(500).json({
+      success: false,
+      message: "SBT 조회 실패",
+      error: error.message,
+    });
+  }
+});
 
 module.exports = router;

@@ -9,14 +9,17 @@ const wallet = new Wallet(process.env.PRIVATE_KEY, provider); // v6에서 Wallet
 console.log("Provider 연결 성공:", provider);
 console.log("Wallet 주소:", wallet.address);
 
-// SBT 스마트 컨트랙트 설정
 const sbtContract = new Contract(
-  process.env.SBT_CONTRACT_ADDRESS, // 컨트랙트 주소
+  process.env.SBT_CONTRACT_ADDRESS,
   [
+     "event SBTIssued(address indexed to, uint256 indexed tokenId, string ipfsUrl, uint8 sbtType)",
     "function issueSBT(address to, uint8 sbtType, string name, string studentId, string ipfsUrl) public",
-    "function owner() public view returns (address)"
-  ], // SBT mint ABI
-  wallet // v6에서 signer를 Contract의 세 번째 인자로 직접 전달
+    "function owner() public view returns (address)",
+    "function balanceOf(address owner) public view returns (uint256)",
+    "function tokenOfOwnerByIndex(address owner, uint256 index) public view returns (uint256)",
+    "function tokenURI(uint256 tokenId) public view returns (string)",
+  ],
+  wallet
 );
 
 const { isAddress } = require("ethers");
@@ -57,7 +60,111 @@ const mintSBT = async (recipientAddress, sbtType, name, studentId, ipfsUrl) => {
     throw new Error("SBT 발급 중 오류 발생");
   }
 };
+const getSBTDataWithoutIndex = async (userAddress) => {
+  try {
+    const totalTokens = await sbtContract._tokenIdCounter(); // 총 발행된 토큰 수
+    console.log(`Total tokens minted: ${totalTokens.toString()}`);
 
+    const sbtDetails = [];
 
-// CommonJS 방식으로 함수 내보내기
-module.exports = { mintSBT };
+    for (let tokenId = 0; tokenId < totalTokens; tokenId++) {
+      try {
+        // 소유자 확인
+        const owner = await sbtContract.ownerOf(tokenId);
+        if (owner.toLowerCase() === userAddress.toLowerCase()) {
+          console.log(`Token ID ${tokenId} is owned by ${userAddress}`);
+
+          // 토큰 URI 가져오기
+          const tokenURI = await sbtContract.tokenURI(tokenId);
+          console.log(`Token URI for Token ID ${tokenId}: ${tokenURI}`);
+
+          // IPFS에서 메타데이터 가져오기
+          const metadataResponse = await axios.get(`https://ipfs.io/ipfs/${tokenURI.replace("ipfs://", "")}`);
+          const metadata = metadataResponse.data;
+
+          sbtDetails.push({
+            tokenId: tokenId.toString(),
+            metadata,
+          });
+        }
+      } catch (error) {
+        console.log(`Token ID ${tokenId} does not exist or is not owned by ${userAddress}`);
+      }
+    }
+
+    return sbtDetails;
+  } catch (error) {
+    console.error("Error fetching SBT data:", error);
+    throw new Error("SBT 조회 중 오류 발생");
+  }
+};
+
+// SBT 조회 함수
+const getSBTData = async (userAddress) => {
+  try {
+    // 유저가 소유한 토큰 개수 조회
+    const balance = await sbtContract.balanceOf(userAddress);
+    console.log(`User ${userAddress} owns ${balance.toString()} tokens.`);
+
+    const sbtDetails = [];
+
+    // balance만큼 반복하며 각 토큰 ID 및 메타데이터 조회
+    for (let index = 0; index < balance; index++) {
+      const tokenId = await sbtContract.tokenOfOwnerByIndex(userAddress, index);
+      console.log(`Token ID at index ${index}: ${tokenId.toString()}`);
+
+      // tokenURI 조회
+      const tokenURI = await sbtContract.tokenURI(tokenId);
+      console.log(`Token URI for Token ID ${tokenId.toString()}: ${tokenURI}`);
+
+      // IPFS에서 메타데이터 가져오기
+      const metadataResponse = await axios.get(`https://ipfs.io/ipfs/${tokenURI.replace("ipfs://", "")}`);
+      const metadata = metadataResponse.data;
+
+      sbtDetails.push({
+        tokenId: tokenId.toString(),
+        metadata,
+      });
+    }
+
+    return sbtDetails;
+  } catch (error) {
+    console.error("Error fetching SBT data:", error);
+    throw new Error("SBT 조회 중 오류 발생");
+  }
+};
+
+const getSBTDataFromEvents = async (userAddress) => {
+  try {
+    console.log(`Fetching SBT data for user: ${userAddress}`);
+
+    // SBTIssued 이벤트 필터 생성
+    const filter = sbtContract.filters.SBTIssued(userAddress);
+
+    // 이벤트 로그 가져오기
+    const events = await sbtContract.queryFilter(filter);
+    console.log(`Found ${events.length} SBTs for user ${userAddress}`);
+
+    const sbtDetails = [];
+
+    for (const event of events) {
+      const { tokenId, ipfsUrl, sbtType } = event.args;
+
+      // IPFS 메타데이터 조회
+      const metadataResponse = await fetch(`https://ipfs.io/ipfs/${ipfsUrl.replace("ipfs://", "")}`);
+      const metadata = await metadataResponse.json();
+
+      sbtDetails.push({
+        tokenId: tokenId.toString(),
+        sbtType: sbtType.toString(),
+        metadata,
+      });
+    }
+
+    return sbtDetails;
+  } catch (error) {
+    console.error("Error fetching SBT data from events:", error);
+    throw new Error("SBT 이벤트 로그 조회 중 오류 발생");
+  }
+};
+module.exports = { mintSBT, getSBTData,getSBTDataWithoutIndex ,getSBTDataFromEvents};
