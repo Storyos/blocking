@@ -1,14 +1,14 @@
-import React, { useState } from "react";
-import styled from "styled-components";
+import React, { useEffect, useState } from "react";
 import "react-calendar/dist/Calendar.css";
-import NotifyIcon from "../components/NotifyIcon";
-import CalendarComponent from "../components/Calendar";
-import { auth } from "../firebase";
 import { FaUser } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
-import { RiApps2AddLine } from "react-icons/ri";
 import { IoIosAddCircle } from "react-icons/io";
+import { RiApps2AddLine } from "react-icons/ri";
 import { TbShieldShare } from "react-icons/tb";
+import { Link, useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import CalendarComponent from "../components/Calendar";
+import NotifyIcon from "../components/NotifyIcon";
+import { auth } from "../firebase";
 
 // 스타일링
 const Container = styled.div`
@@ -177,6 +177,12 @@ const MenuButton = styled.button`
 `;
 
 const Main = () => {
+
+  useEffect(() => {
+    setUserName(auth.currentUser.displayName);
+  }, []);
+
+  const [userName, setUserName] = useState("");
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const navigate = useNavigate();
@@ -207,7 +213,7 @@ const Main = () => {
             color="#50c2c9"
           />
         </ProfilePicContainer>
-        {auth.currentUser.displayName}님, 안녕하세요.
+        {userName}님, 안녕하세요.
       </UserContent>
       <CalendarComponent
         selectedDate={selectedDate}

@@ -83,12 +83,38 @@ const Portfolio = () => {
   const [lockState, setLockState] = useState([]);
   const [sbtData, setSbtData] = useState([]); // SBT 데이터를 저장할 상태
   const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
+  const [userAddress, setUserAddress] = useState(""); // 사용자의 지갑 주소 상태
+
+  // MetaMask에서 지갑 주소 가져오기
+  const getUserAddress = async () => {
+    if (window.ethereum) {
+      try {
+        // MetaMask 지갑 연결
+        const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+        setUserAddress(accounts[0]); // 첫 번째 계정의 주소를 저장
+        console.log(accounts);
+        return accounts[0];
+      } catch (error) {
+        console.error("MetaMask 연결 실패:", error);
+        return null;
+      }
+    } else {
+      console.error("MetaMask가 설치되지 않았습니다.");
+      return null;
+    }
+  };
 
   const fetchSBTs = async () => {
     try {
-      const userAddress = "0x4EE06b1E5c7468f9521699D349CbF8c2610BF92c"; // MetaMask에서 가져올 수 있음
+      const address = await getUserAddress();
+      if (!address) {
+        console.error("지갑 주소를 가져오지 못했습니다.");
+        setIsLoading(false);
+        return;
+      }
+
       const response = await axios.get(
-        `http://localhost:4000/api/sbtmint/getSBTData?userAddress=${userAddress}`
+        `http://localhost:4000/api/sbtmint/getSBTData?userAddress=${address}`
       );
       console.log("SBT 조회 결과:", response.data);
       const sbtDetails = response.data.sbtDetails;

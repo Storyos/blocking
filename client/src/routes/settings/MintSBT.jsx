@@ -115,14 +115,42 @@ const SubmitButton = styled.button`
 export default function MintSBT() {
   const { register, handleSubmit, reset } = useForm();
   const [isLoading, setIsLoading] = useState(false);
+  const [userAddress, setUserAddress] = useState(""); // MetaMask 지갑 주소 상태 추가
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const menuValue = queryParams.get("menu");
+
+  // MetaMask 지갑 주소 가져오기
+  const getUserAddress = async () => {
+    if (window.ethereum) {
+      try {
+        const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+        setUserAddress(accounts[0]); // 첫 번째 계정을 상태에 저장
+        return accounts[0];
+      } catch (error) {
+        console.error("MetaMask 연결 실패:", error);
+        alert("MetaMask 연결을 확인해주세요.");
+        return null;
+      }
+    } else {
+      console.error("MetaMask가 설치되지 않았습니다.");
+      alert("MetaMask를 설치해주세요.");
+      return null;
+    }
+  };
+
   const onSubmit = async (data) => {
     console.log(data);
     setIsLoading(true);
-  
+
     try {
+      // MetaMask 지갑 주소 가져오기
+      const address = await getUserAddress();
+      if (!address) {
+        setIsLoading(false);
+        return;
+      }
+
       // Pinata에 데이터 업로드
       const pinataResponse = await axios.post(
         `http://localhost:4000/api/sbt/uploadToPinata`,
@@ -133,22 +161,22 @@ export default function MintSBT() {
           status: data.status,
         }
       );
-  
+
       if (!pinataResponse.data?.data?.IpfsHash) {
         throw new Error("Pinata에서 IPFS 해시를 반환하지 못했습니다.");
       }
-  
+
       console.log("Pinata 업로드 성공:", pinataResponse.data.data.IpfsHash);
-  
+
       // SBT 발급 요청
       const mintResponse = await axios.post(`http://localhost:4000/api/sbtmint/mintSBT`, {
-        recipientAddress: "0x4EE06b1E5c7468f9521699D349CbF8c2610BF92c", // 수령인의 Ethereum 주소
+        recipientAddress: address, // MetaMask에서 가져온 지갑 주소
         sbtType: 0, // SBT 타입 (enum, 예: 0 = CLUB_ACTIVITY)
         name: data.name, // 이름
         studentId: data.studentId, // 학번
         ipfsUrl: pinataResponse.data.data.IpfsHash, // Pinata에서 반환된 IPFS Hash
       });
-  
+
       console.log("SBT 발급 성공:", mintResponse.data);
       alert("SBT 발급이 완료되었습니다!");
     } catch (error) {
@@ -158,7 +186,6 @@ export default function MintSBT() {
       setIsLoading(false);
     }
   };
-  
 
   const renderStatusOptions = () => {
     switch (menuValue) {
@@ -214,12 +241,7 @@ export default function MintSBT() {
   return (
     <Container>
       <FormContainer onSubmit={handleSubmit(onSubmit)}>
-        {/* <Title>SBT 발급</Title> */}
-        {/* <Logo src={`/img/Logo.gif`} alt="PKNU Logo" /> */}
-        <Logo1
-          src={`/img/pknuLogo.png`}
-          alt="PKNU Logo"
-        />
+        <Logo1 src={`/img/pknuLogo.png`} alt="PKNU Logo" />
         <InputGroup>
           <label htmlFor="name">이름</label>
           <input
@@ -251,10 +273,7 @@ export default function MintSBT() {
           </select>
         </InputGroup>
 
-        <SubmitButton
-          type="submit"
-          disabled={isLoading}
-        >
+        <SubmitButton type="submit" disabled={isLoading}>
           {isLoading ? "로딩 중..." : "발급하기"}
         </SubmitButton>
       </FormContainer>
