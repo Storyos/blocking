@@ -21,7 +21,8 @@ const Container = styled.div`
   max-width: 600px; // 최대 width는 600이고, 그 이하에선 화면 너비에 맞춤
   height: 100vh;
   background-color: white; /* 박스 배경 색상 */
-  overflow: hidden;
+  /* overflow: hidden; */
+  overflow-x: hidden;
 `;
 
 const LoaderContainer = styled.div`
@@ -96,7 +97,7 @@ body {
 	width: 100vw;
 	height: 100vh;
 	background-color: white;
-	overflow: hidden;
+	/* overflow: hidden; */
 }
  `;
   const [isLoading, setLoading] = useState(true);

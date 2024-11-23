@@ -32,6 +32,20 @@ function AnimatedRoutes() {
     //   >
     <Routes location={location}>
       {/* 로그인한 사용자만 볼 수 있는 페이지*/}
+      {/* main에서만 메뉴바 제거 */}
+      <Route
+        path="/"
+        element={
+          <LoginConfirm>
+            <Outlet />
+          </LoginConfirm>
+        }
+      >
+        <Route
+          path=""
+          element={<Main />}
+        />
+      </Route>
       <Route
         path="/"
         element={
@@ -48,10 +62,6 @@ function AnimatedRoutes() {
         <Route
           path="/walletconfirm"
           element={<WalletConfirm />}
-        />
-        <Route
-          path=""
-          element={<Main />}
         />
         <Route
           path="kliplogin"
@@ -90,6 +100,7 @@ function AnimatedRoutes() {
           element={<MintSBT />}
         />
       </Route>
+
       {/* 로그인하지 않은 사용자들이 볼 수 있는 페이지 */}
       <Route
         path="/"

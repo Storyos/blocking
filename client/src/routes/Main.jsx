@@ -1,9 +1,14 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import NotifyIcon from "../components/NotifyIcon";
 import CalendarComponent from "../components/Calendar";
+import { auth } from "../firebase";
+import { FaUser } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
+import { RiApps2AddLine } from "react-icons/ri";
+import { IoIosAddCircle } from "react-icons/io";
+import { TbShieldShare } from "react-icons/tb";
 
 // 스타일링
 const Container = styled.div`
@@ -13,7 +18,7 @@ const Container = styled.div`
   justify-content: center;
   border-radius: 16px;
   padding: 20px;
-  font-family: "Montserrat", sans-serif;
+  padding-bottom: 0px;
 `;
 
 const Header = styled.div`
@@ -24,147 +29,234 @@ const Header = styled.div`
   justify-content: center;
 `;
 
-const CalendarContainer = styled.div`
+const UserContent = styled.div`
+  width: 90%;
+  @media (min-width: 600px) {
+    width: 70%;
+    font-size: 18px;
+    margin-top: 10px;
+  }
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  font-weight: bold;
+  gap: 13px;
+`;
+
+const ProfilePicContainer = styled.div`
+  width: 40px;
+  height: 40px;
+  @media (min-width: 600px) {
+    width: 50px;
+    height: 50px;
+  }
+  border-radius: 50%;
+  background-color: #e6e6e6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+`;
+
+const TitleText = styled.div`
+  width: 90%;
+  @media (min-width: 600px) {
+    width: 70%;
+    font-size: 18px;
+  }
+  text-align: left;
+  font-weight: bold;
+  margin-top: 35px;
+`;
+
+const ServiceLinkContainer = styled.div`
+  z-index: 10;
+  margin-top: 20px;
   width: 100%;
-  background-color: white;
-  padding: 20px;
-  border-radius: 16px;
-  margin: 20px 0;
+  height: 25vh;
+  bottom: 0;
+  background-color: #ffffff;
+  border-radius: 50px 50px 0px 0px;
+  box-shadow: 0px -4px 10px rgba(0, 0, 0, 0.15);
+
   display: flex;
   justify-content: center;
-
-  .react-calendar {
-    width: 70%;
-    font-size: 18px; /* 글자 크기 증가 */
-    line-height: 1.6; /* 글자 간격 조정 */
-    border-radius: 16px; /* 둥근 모서리 추가 */
-    border: 2px solid #50c2c9; /* 테두리 색상 추가 */
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
-    background: linear-gradient(145deg, #e0f7fa, #ffffff); /* 그라데이션 배경 */
+  gap: 20px;
+  padding-top: 40px;
+  @media (min-width: 600px) {
+    width: 80%;
+    padding-top: 70px;
+    margin-top: 30px;
   }
+`;
 
-  .react-calendar__tile {
-    border: none;
-    font-size: 12px;
-    background-color: transparent; /* 모든 타일 기본 배경색 투명 */
-  }
+const ServiceIconWrapper = styled.div``;
 
-  .react-calendar__tile--active {
-    background-color: #50c2c9; /* 선택된 날짜 색상 */
-    border-radius: 8px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  }
-
-  .react-calendar__tile--active:focus {
-    outline: none; /* 포커스시 테두리 제거 */
-  }
-
-  .react-calendar__tile:hover {
-    background-color: #e0f7fa;
-    color: #00796b;
-    border-radius: 8px;
-  }
-
-  .react-calendar__tile--now {
-  }
-
-  .react-calendar__navigation__label {
-    color: #50c2c9;
+const ServiceLink = styled(Link)`
+  text-decoration: none;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  @media (min-width: 600px) {
     font-size: 15px;
-    font-weight: normal;
-  }
-
-  .react-calendar__month-view__weekdays {
-    font-weight: normal;
-    color: #888;
-    font-size: 13px;
   }
 `;
 
-const NotificationContainer = styled.div`
-  background-color: #e3f2fd; /* 부드러운 파란색 배경 */
-  border-left: 5px solid #50c2c9; /* 강조 색상 */
-  padding: 15px 20px;
-  border-radius: 12px;
-  width: 65%; /* 더 균형 잡힌 너비 */
-  margin-top: 0px; /* 약간의 여백 추가 */
-  font-size: 16px;
-  color: #0d47a1; /* 깊은 파란색 텍스트 */
-  text-align: left;
-  font-family: "Montserrat", sans-serif;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
-
-  strong {
-    color: #1a73e8; /* 강조 텍스트에 약간 밝은 파란색 */
+const ServiceIcon = styled.div`
+  width: 65px;
+  height: 65px;
+  @media (min-width: 600px) {
+    width: 90px;
+    height: 90px;
   }
-
-  &::before {
-    margin-right: 8px;
-    font-size: 18px; /* 아이콘 크기 조정 */
-  }
-`;
-
-
-const RedDot = styled.span`
-  display: block;
-  width: 5px;
-  height: 5px;
-  background-color: red;
   border-radius: 50%;
-  margin: 0 auto;
-  margin-top: 2px;
+  background-color: #ffffff;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+
+  border: none;
+  color: #858585;
+  transition: 0.1s;
+  &:hover {
+    color: #50c2c9; /* 버튼 호버 색상 */
+  }
+
+  svg {
+    font-size: 45px;
+
+    @media (max-width: 600px) {
+      font-size: 30px;
+    }
+  }
+`;
+
+const PopupMenu = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 1000;
+`;
+
+const Overlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.238);
+  z-index: 999;
+`;
+
+const MenuButton = styled.button`
+  background-color: #79d1d6;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  font-family: "Noto Sans KR";
+
+  &:hover {
+    background-color: #3aa7af;
+  }
 `;
 
 const Main = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [notes] = useState({
-    "2024-11-01": "제2학기 대학원 학위 청구 논문 발표",
-    "2024-11-06": "오늘 수영 제부대회날입니다.",
-    "2024-11-13": "[대학] 동계 계절수업 수강신청",
-    "2024-11-28": "캡스톤디자인 경진대회",
-  });
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
   };
 
-  const formatDateToLocalString = (date) => {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // 월은 0부터 시작하므로 +1
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
+  const handleSBTClick = () => {
+    setIsPopupOpen(true);
   };
 
-  const tileContent = ({ date, view }) => {
-    if (view === "month") {
-      const dateString = formatDateToLocalString(date); // 로컬 타임존 기준으로 포맷
-      if (Object.keys(notes).includes(dateString)) {
-        return <RedDot />;
-      }
-    }
+  const handleMenuSelect = (menu) => {
+    setIsPopupOpen(false);
+    navigate(`/mintsbt?menu=${encodeURIComponent(menu)}`);
   };
 
   return (
     <Container>
-
       <Header>
         <NotifyIcon />
       </Header>
 
-      <CalendarContainer>
-        <Calendar
-          onChange={handleDateChange}
-          value={selectedDate}
-          formatDay={(locale, date) => date.getDate().toString()}
-          tileContent={tileContent}
-        />
-      </CalendarContainer>
+      <UserContent>
+        <ProfilePicContainer>
+          <FaUser
+            size={17}
+            color="#50c2c9"
+          />
+        </ProfilePicContainer>
+        {auth.currentUser.displayName}님, 안녕하세요.
+      </UserContent>
+      <CalendarComponent
+        selectedDate={selectedDate}
+        handleDateChange={handleDateChange}
+      />
+      <TitleText>주요서비스 바로가기</TitleText>
+      <ServiceLinkContainer>
+        <ServiceIconWrapper>
+          <ServiceLink to="portfolio">
+            <ServiceIcon>
+              <RiApps2AddLine />
+            </ServiceIcon>
+            포트폴리오
+          </ServiceLink>
+        </ServiceIconWrapper>
 
-      {notes[formatDateToLocalString(selectedDate)] && (
-        <NotificationContainer>
-          📢 <strong>공지:</strong> {notes[formatDateToLocalString(selectedDate)]}
-        </NotificationContainer>
-      )}
+        <ServiceIconWrapper>
+          <ServiceLink
+            to="#"
+            onClick={handleSBTClick}
+          >
+            <ServiceIcon>
+              <IoIosAddCircle />
+            </ServiceIcon>
+            SBT 발행
+          </ServiceLink>
+        </ServiceIconWrapper>
+
+        {isPopupOpen && (
+          <>
+            <Overlay onClick={() => setIsPopupOpen(false)} />
+            <PopupMenu>
+              <MenuButton onClick={() => handleMenuSelect("동아리")}>동아리</MenuButton>
+              <MenuButton onClick={() => handleMenuSelect("증명서")}>증명서</MenuButton>
+              <MenuButton onClick={() => handleMenuSelect("비교과 프로그램")}>비교과 프로그램</MenuButton>
+              <MenuButton onClick={() => handleMenuSelect("학생회")}>학생회</MenuButton>
+            </PopupMenu>
+          </>
+        )}
+
+        <ServiceIconWrapper>
+          <ServiceLink to="share">
+            <ServiceIcon>
+              <TbShieldShare />
+            </ServiceIcon>
+            QR코드 공유
+          </ServiceLink>
+        </ServiceIconWrapper>
+      </ServiceLinkContainer>
     </Container>
   );
 };
