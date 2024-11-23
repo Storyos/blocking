@@ -2,9 +2,48 @@ import axios from "axios"; // Axios 사용
 import React, { useEffect, useState } from "react";
 import { FaCertificate, FaLock, FaLockOpen } from "react-icons/fa"; // 아이콘 불러오기
 import styled from "styled-components";
+import Modal from "../components/Modal"; // Modal 컴포넌트 불러오기
 import NotifyIcon from "../components/NotifyIcon";
 
 // 스타일링
+const ModalContent = styled.div`
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+`;
+
+const Section = styled.div`
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #eaeaea;
+
+  &:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+`;
+
+const InfoRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+
+  strong {
+    font-weight: 600;
+    color: #333;
+  }
+
+  span {
+    font-size: 14px;
+    color: #666;
+  }
+`;
+
+
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -78,21 +117,37 @@ const LockIcon = styled.div`
   cursor: pointer;
   color: #50c2c9;
 `;
+const ModalTitle = styled.h3`
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 16px;
+  color: #333;
+  text-align: center;
+`;
+
+const ModalInfo = styled.p`
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #666;
+
+  strong {
+    color: #333;
+  }
+`;
 
 const Portfolio = () => {
   const [lockState, setLockState] = useState([]);
-  const [sbtData, setSbtData] = useState([]); // SBT 데이터를 저장할 상태
-  const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
-  const [userAddress, setUserAddress] = useState(""); // 사용자의 지갑 주소 상태
+  const [sbtData, setSbtData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [userAddress, setUserAddress] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedSbt, setSelectedSbt] = useState(null);
 
-  // MetaMask에서 지갑 주소 가져오기
   const getUserAddress = async () => {
     if (window.ethereum) {
       try {
-        // MetaMask 지갑 연결
         const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
-        setUserAddress(accounts[0]); // 첫 번째 계정의 주소를 저장
-        console.log(accounts);
+        setUserAddress(accounts[0]);
         return accounts[0];
       } catch (error) {
         console.error("MetaMask 연결 실패:", error);
@@ -116,14 +171,14 @@ const Portfolio = () => {
       const response = await axios.get(
         `http://localhost:4000/api/sbtmint/getSBTData?userAddress=${address}`
       );
-      console.log("SBT 조회 결과:", response.data);
       const sbtDetails = response.data.sbtDetails;
-      setSbtData(sbtDetails); // SBT 데이터를 상태에 저장
-      setLockState(sbtDetails.map(() => true)); // 초기 lockState는 모두 잠금 상태
-      setIsLoading(false); // 로딩 완료
+      setSbtData(sbtDetails);
+      console.log(sbtDetails);
+      setLockState(sbtDetails.map(() => true));
+      setIsLoading(false);
     } catch (error) {
       console.error("SBT 조회 실패:", error);
-      setIsLoading(false); // 로딩 완료
+      setIsLoading(false);
     }
   };
 
@@ -137,8 +192,18 @@ const Portfolio = () => {
     setLockState(newLockState);
   };
 
+  const openModal = (sbt) => {
+    setSelectedSbt(sbt);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedSbt(null);
+  };
+
   if (isLoading) {
-    return <div>로딩 중...</div>; // 로딩 화면 표시
+    return <div>로딩 중...</div>;
   }
 
   return (
@@ -149,7 +214,7 @@ const Portfolio = () => {
       </Header>
       <GridContainer>
         {sbtData.map((sbt, index) => (
-          <div key={sbt.tokenId}>
+          <div key={sbt.tokenId} onClick={() => openModal(sbt)}>
             <Card>
               <FaCertificate />
               <h3>{sbt.metadata.status || `자격증 ${index + 1}`}</h3>
@@ -158,13 +223,72 @@ const Portfolio = () => {
             </Card>
             <SbtContainer>
               {`Token ID: ${sbt.tokenId}`}
-              <LockIcon onClick={() => toggleLock(index)}>
+              <LockIcon
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleLock(index);
+                }}
+              >
                 {lockState[index] ? <FaLock /> : <FaLockOpen />}
               </LockIcon>
             </SbtContainer>
           </div>
         ))}
       </GridContainer>
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        {selectedSbt && (
+          <ModalContent>
+            <ModalTitle>자격증 상세 정보</ModalTitle>
+
+            <Section>
+              <InfoRow>
+                <strong>상태</strong>
+                <span>{selectedSbt.metadata.status}</span>
+              </InfoRow>
+              <InfoRow>
+                <strong>학번</strong>
+                <span>{selectedSbt.metadata.studentId}</span>
+              </InfoRow>
+              <InfoRow>
+                <strong>학교</strong>
+                <span>{selectedSbt.metadata.university}</span>
+              </InfoRow>
+              <InfoRow>
+                <strong>Token ID</strong>
+                <span>{selectedSbt.tokenId}</span>
+              </InfoRow>
+            </Section>
+
+            <Section>
+              <InfoRow>
+                <strong>설명</strong>
+                <span>{selectedSbt.metadata.description}</span>
+              </InfoRow>
+              <InfoRow>
+                <strong>발급일</strong>
+                <span>{selectedSbt.metadata.issuedDate}</span>
+              </InfoRow>
+            </Section>
+
+            {selectedSbt.metadata.extraDetails && (
+              <Section>
+                <InfoRow>
+                  <strong>동아리 이름</strong>
+                  <span>{selectedSbt.metadata.extraDetails.clubName}</span>
+                </InfoRow>
+                <InfoRow>
+                  <strong>역할</strong>
+                  <span>{selectedSbt.metadata.extraDetails.role}</span>
+                </InfoRow>
+                <InfoRow>
+                  <strong>활동 기간</strong>
+                  <span>{selectedSbt.metadata.extraDetails.activityDuration}</span>
+                </InfoRow>
+              </Section>
+            )}
+          </ModalContent>
+        )}
+      </Modal>
     </Container>
   );
 };

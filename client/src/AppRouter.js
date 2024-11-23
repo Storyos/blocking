@@ -1,24 +1,23 @@
-import { BrowserRouter, Routes, Route, Outlet, useLocation } from "react-router-dom";
-import WalletLogin from "./routes/login/WalletLogin";
-import WalletPwd from "./routes/login/WalletPwd";
-import WalletConfirm from "./routes/login/WalletConfirm";
-import KlipLogin from "./routes/login/KlipLogin";
-import Main from "./routes/Main";
-import Profile from "./routes/settings/Profile";
-import Notification from "./routes/settings/Notification";
-import Noti from "./routes/settings/Noti";
-import Settings from "./routes/settings/Settings";
-import Portfolio from "./routes/Portfolio";
-import Share from "./routes/Share";
-import ShareConfirm from "./routes/ShareConfirm";
-import Login from "./routes/login/Login";
+import { BrowserRouter, Outlet, Route, Routes, useLocation } from "react-router-dom";
+import "./App.css";
 import { LoginConfirm, RedirectIfLoggedIn } from "./components/LoginConfirm";
+import MenubarLayout from "./components/MenubarLayout";
+import KlipLogin from "./routes/login/KlipLogin";
+import Login from "./routes/login/Login";
 import SignUp from "./routes/login/SignUp";
 import SignUpAgree from "./routes/login/SignUpAgree";
+import WalletConfirm from "./routes/login/WalletConfirm";
+import WalletLogin from "./routes/login/WalletLogin";
+import WalletPwd from "./routes/login/WalletPwd";
+import Main from "./routes/Main";
+import Portfolio from "./routes/Portfolio";
 import MintSBT from "./routes/settings/MintSBT";
-import { TransitionGroup, CSSTransition } from "react-transition-group";
-import "./App.css";
-import MenubarLayout from "./components/MenubarLayout";
+import Noti from "./routes/settings/Noti";
+import Notification from "./routes/settings/Notification";
+import Profile from "./routes/settings/Profile";
+import Settings from "./routes/settings/Settings";
+import Share from "./routes/Share";
+import ShareConfirm from "./routes/ShareConfirm";
 
 function AnimatedRoutes() {
   const location = useLocation(); // BrowserRouter 내부에서 useLocation 사용
