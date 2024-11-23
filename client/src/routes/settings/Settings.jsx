@@ -1,7 +1,14 @@
-import styled from "styled-components";
+import { BrowserProvider } from "ethers";
+import {
+  FaChevronRight,
+  FaLock,
+  FaSignOutAlt,
+  FaUser,
+  FaWallet,
+} from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import BackIcon from "../../components/BackIcon";
-import { FaUser, FaLock, FaChevronRight, FaSignOutAlt, FaWallet } from "react-icons/fa";
 import { auth } from "../../firebase";
 
 const Container = styled.div`
@@ -103,8 +110,23 @@ export default function Settings() {
     }
   };
 
-  const onWalletConnect = () => {
-    alert("지갑 연동 기능은 현재 구현 중입니다.");
+  const connectWallet = async () => {
+    try {
+      if (!window.ethereum) {
+        alert("MetaMask가 설치되어 있지 않습니다. 설치 후 다시 시도해주세요.");
+        return;
+      }
+
+      const provider = new BrowserProvider(window.ethereum); // Web3Provider 대신 BrowserProvider 사용
+      const accounts = await provider.send("eth_requestAccounts", []); // 계정 요청
+      const signer = await provider.getSigner(); // 서명 객체 가져오기
+      const address = await signer.getAddress(); // MetaMask 주소 가져오기
+
+      alert(`MetaMask와 성공적으로 연결되었습니다: ${address}`);
+    } catch (error) {
+      console.error("MetaMask 연동 에러:", error);
+      alert("MetaMask 연동 중 오류가 발생했습니다.");
+    }
   };
 
   return (
@@ -136,7 +158,7 @@ export default function Settings() {
           <FaChevronRight className="chevron" />
         </SettingsLink>
       </LinkWrapper>
-      <WalletButton onClick={onWalletConnect}>
+      <WalletButton onClick={connectWallet}>
         <FaWallet style={{ marginRight: "10px" }} />
         지갑 연동
       </WalletButton>
