@@ -111,6 +111,25 @@ const SbtContainer = styled.div`
   font-weight: bold;
   text-align: center;
 `;
+const DeleteButton = styled.button`
+  display: block;
+  width: 100%;
+  max-width: 180px;
+  margin: 20px auto 0;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #e74c3c;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #c0392b;
+  }
+`;
 
 const LockIcon = styled.div`
   margin-left: 5px;
@@ -203,7 +222,7 @@ const Portfolio = () => {
   };
 
   if (isLoading) {
-    return <div>로딩 중...</div>;
+    return <div>불러오는 중...</div>;
   }
 
   return (
@@ -236,59 +255,79 @@ const Portfolio = () => {
         ))}
       </GridContainer>
       <Modal isOpen={isModalOpen} onClose={closeModal}>
-        {selectedSbt && (
-          <ModalContent>
-            <ModalTitle>자격증 상세 정보</ModalTitle>
+  {selectedSbt && (
+    <ModalContent>
+      <ModalTitle>자격증 상세 정보</ModalTitle>
 
-            <Section>
-              <InfoRow>
-                <strong>상태</strong>
-                <span>{selectedSbt.metadata.status}</span>
-              </InfoRow>
-              <InfoRow>
-                <strong>학번</strong>
-                <span>{selectedSbt.metadata.studentId}</span>
-              </InfoRow>
-              <InfoRow>
-                <strong>학교</strong>
-                <span>{selectedSbt.metadata.university}</span>
-              </InfoRow>
-              <InfoRow>
-                <strong>Token ID</strong>
-                <span>{selectedSbt.tokenId}</span>
-              </InfoRow>
-            </Section>
+      <Section>
+        <InfoRow>
+          <strong>상태</strong>
+          <span>{selectedSbt.metadata.status}</span>
+        </InfoRow>
+        <InfoRow>
+          <strong>학번</strong>
+          <span>{selectedSbt.metadata.studentId}</span>
+        </InfoRow>
+        <InfoRow>
+          <strong>학교</strong>
+          <span>{selectedSbt.metadata.university}</span>
+        </InfoRow>
+        <InfoRow>
+          <strong>Token ID</strong>
+          <span>{selectedSbt.tokenId}</span>
+        </InfoRow>
+      </Section>
 
-            <Section>
-              <InfoRow>
-                <strong>설명</strong>
-                <span>{selectedSbt.metadata.description}</span>
-              </InfoRow>
-              <InfoRow>
-                <strong>발급일</strong>
-                <span>{selectedSbt.metadata.issuedDate}</span>
-              </InfoRow>
-            </Section>
+      <Section>
+        <InfoRow>
+          <strong>설명</strong>
+          <span>{selectedSbt.metadata.description}</span>
+        </InfoRow>
+        <InfoRow>
+          <strong>발급일</strong>
+          <span>{selectedSbt.metadata.issuedDate}</span>
+        </InfoRow>
+      </Section>
 
-            {selectedSbt.metadata.extraDetails && (
-              <Section>
-                <InfoRow>
-                  <strong>동아리 이름</strong>
-                  <span>{selectedSbt.metadata.extraDetails.clubName}</span>
-                </InfoRow>
-                <InfoRow>
-                  <strong>역할</strong>
-                  <span>{selectedSbt.metadata.extraDetails.role}</span>
-                </InfoRow>
-                <InfoRow>
-                  <strong>활동 기간</strong>
-                  <span>{selectedSbt.metadata.extraDetails.activityDuration}</span>
-                </InfoRow>
-              </Section>
-            )}
-          </ModalContent>
-        )}
-      </Modal>
+      {selectedSbt.metadata.extraDetails && (
+        <Section>
+          <InfoRow>
+            <strong>동아리 이름</strong>
+            <span>{selectedSbt.metadata.extraDetails.clubName}</span>
+          </InfoRow>
+          <InfoRow>
+            <strong>역할</strong>
+            <span>{selectedSbt.metadata.extraDetails.role}</span>
+          </InfoRow>
+          <InfoRow>
+            <strong>활동 기간</strong>
+            <span>{selectedSbt.metadata.extraDetails.activityDuration}</span>
+          </InfoRow>
+        </Section>
+      )}
+
+      {/* 삭제 버튼 추가 */}
+      <DeleteButton
+        onClick={async () => {
+          try {
+            const response = await axios.post("http://localhost:4000/api/sbtmint/deleteSBT", {
+              tokenId: selectedSbt.tokenId,
+            });
+            alert("SBT가 성공적으로 삭제되었습니다!");
+            closeModal(); // 모달 닫기
+            window.location.reload(); // 데이터 갱신
+          } catch (error) {
+            console.error("삭제 실패:", error);
+            alert("SBT 삭제 중 오류가 발생했습니다.");
+          }
+        }}
+      >
+        삭제하기
+      </DeleteButton>
+    </ModalContent>
+  )}
+</Modal>
+
     </Container>
   );
 };
