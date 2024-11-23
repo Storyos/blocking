@@ -12,15 +12,18 @@ console.log("Wallet 주소:", wallet.address);
 const sbtContract = new Contract(
   process.env.SBT_CONTRACT_ADDRESS,
   [
-     "event SBTIssued(address indexed to, uint256 indexed tokenId, string ipfsUrl, uint8 sbtType)",
+    "event SBTIssued(address indexed to, uint256 indexed tokenId, string ipfsUrl, uint8 sbtType)",
     "function issueSBT(address to, uint8 sbtType, string name, string studentId, string ipfsUrl) public",
     "function owner() public view returns (address)",
     "function balanceOf(address owner) public view returns (uint256)",
     "function tokenOfOwnerByIndex(address owner, uint256 index) public view returns (uint256)",
     "function tokenURI(uint256 tokenId) public view returns (string)",
+    "function ownerOf(uint256 tokenId) public view returns (address)", // 추가된 부분
+    "function revokeSBT(uint256 tokenId) external",
   ],
   wallet
 );
+
 
 const { isAddress } = require("ethers");
 
@@ -134,6 +137,30 @@ const getSBTData = async (userAddress) => {
   }
 };
 
+const deleteSBT = async (tokenId) => {
+  try {
+    console.log("삭제 요청된 Token ID:", tokenId);
+
+    // 컨트랙트 소유자 확인
+    const contractOwner = await sbtContract.owner();
+    if (contractOwner.toLowerCase() !== wallet.address.toLowerCase()) {
+      throw new Error("현재 계정이 컨트랙트 소유자가 아닙니다.");
+    }
+
+    // revokeSBT 메서드 호출
+    const tx = await sbtContract.revokeSBT(tokenId);
+    console.log(`Transaction submitted: ${tx.hash}`);
+
+    // 트랜잭션 완료 대기
+    const receipt = await tx.wait();
+    console.log(`Transaction confirmed: ${receipt.transactionHash}`);
+    return receipt.transactionHash;
+  } catch (error) {
+    console.error("SBT 삭제 중 오류 발생:", error);
+    throw new Error("SBT 삭제 실패");
+  }
+};
+
 const getSBTDataFromEvents = async (userAddress) => {
   try {
     console.log(`Fetching SBT data for user: ${userAddress}`);
@@ -146,19 +173,38 @@ const getSBTDataFromEvents = async (userAddress) => {
     console.log(`Found ${events.length} SBTs for user ${userAddress}`);
 
     const sbtDetails = [];
-
     for (const event of events) {
-      const { tokenId, ipfsUrl, sbtType } = event.args;
+      try {
+        const { tokenId, ipfsUrl, sbtType } = event.args;
 
-      // IPFS 메타데이터 조회
-      const metadataResponse = await fetch(`https://ipfs.io/ipfs/${ipfsUrl.replace("ipfs://", "")}`);
-      const metadata = await metadataResponse.json();
+        console.log(`Processing Token ID: ${tokenId}, IPFS URL: ${ipfsUrl}`);
 
-      sbtDetails.push({
-        tokenId: tokenId.toString(),
-        sbtType: sbtType.toString(),
-        metadata,
-      });
+        // 컨트랙트 상태에서 토큰 유효성 검증
+        const isValid = await sbtContract.ownerOf(tokenId).catch(() => null);
+        if (!isValid || isValid.toLowerCase() !== userAddress.toLowerCase()) {
+          console.warn(`Token ID ${tokenId} is no longer valid or not owned by ${userAddress}. Skipping.`);
+          continue;
+        }
+
+        // IPFS 메타데이터 조회
+        const metadataResponse = await fetch(`https://ipfs.io/ipfs/${ipfsUrl.replace("ipfs://", "")}`);
+        const contentType = metadataResponse.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+          console.warn(`Skipping Token ID ${tokenId} due to invalid content-type: ${contentType}`);
+          continue;
+        }
+
+        const metadata = await metadataResponse.json();
+        console.log(metadata);
+        sbtDetails.push({
+          tokenId: tokenId.toString(),
+          sbtType: sbtType.toString(),
+          metadata,
+        });
+      } catch (error) {
+        console.error(`Error processing Token ID ${event.args?.tokenId}: ${error.message}`);
+        continue;
+      }
     }
 
     return sbtDetails;
@@ -167,4 +213,5 @@ const getSBTDataFromEvents = async (userAddress) => {
     throw new Error("SBT 이벤트 로그 조회 중 오류 발생");
   }
 };
-module.exports = { mintSBT, getSBTData,getSBTDataWithoutIndex ,getSBTDataFromEvents};
+
+module.exports = { mintSBT, deleteSBT,getSBTData,getSBTDataWithoutIndex ,getSBTDataFromEvents};

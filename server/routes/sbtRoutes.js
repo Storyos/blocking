@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const router = express.Router();
-const { mintSBT, getSBTDataFromEvents } = require("../services/ethers"); // getSBTData 추가
+const { mintSBT, getSBTDataFromEvents,deleteSBT } = require("../services/ethers"); // getSBTData 추가
 
 // SBT 발급 라우트
 router.post("/mintSBT", async (req, res) => {
@@ -52,6 +52,32 @@ router.get("/getSBTData", async (req, res) => {
     res.status(500).json({
       success: false,
       message: "SBT 조회 실패",
+      error: error.message,
+    });
+  }
+});
+router.post("/deleteSBT", async (req, res) => {
+  const { tokenId } = req.body;
+
+  if (!tokenId) {
+    return res.status(400).json({
+      success: false,
+      message: "tokenId가 필요합니다.",
+    });
+  }
+
+  try {
+    const transactionHash = await deleteSBT(tokenId);
+    res.status(200).json({
+      success: true,
+      message: "SBT 삭제 성공",
+      transactionHash,
+    });
+  } catch (error) {
+    console.error("SBT 삭제 중 오류 발생:", error);
+    res.status(500).json({
+      success: false,
+      message: "SBT 삭제 실패",
       error: error.message,
     });
   }
