@@ -3,7 +3,7 @@ import React from 'react';
 const App = () => {
   const handleLogin = () => {
     console.log('Redirecting to Klip login page...');
-    window.location.href = 'http://localhost:3001/klip/login';
+    window.location.href = 'http://52.78.70.40:3001/klip/login';
   };
 
   return (
