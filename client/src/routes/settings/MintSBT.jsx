@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
+import { Loader } from "../../components/Loader";
 
 const Container = styled.div`
   display: flex;
@@ -112,6 +113,38 @@ const SubmitButton = styled.button`
   }
 `;
 
+const PopupMenu = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  padding: 50px 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+  z-index: 1000;
+  color: #535353;
+
+  @media (min-width: 600px) {
+    padding: 100px 50px;
+  }
+`;
+
+const Overlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.238);
+  z-index: 999;
+`;
+
 export default function MintSBT() {
   const { register, handleSubmit, reset } = useForm();
   const [isLoading, setIsLoading] = useState(false);
@@ -152,15 +185,12 @@ export default function MintSBT() {
       }
 
       // Pinata에 데이터 업로드
-      const pinataResponse = await axios.post(
-        `https://pscs.store/api/sbt/uploadToPinata`,
-        {
-          name: data.name,
-          studentId: data.studentId,
-          university: "Pukyong University",
-          status: data.status,
-        }
-      );
+      const pinataResponse = await axios.post(`https://pscs.store/api/sbt/uploadToPinata`, {
+        name: data.name,
+        studentId: data.studentId,
+        university: "Pukyong University",
+        status: data.status,
+      });
 
       if (!pinataResponse.data?.data?.IpfsHash) {
         throw new Error("Pinata에서 IPFS 해시를 반환하지 못했습니다.");
@@ -240,8 +270,20 @@ export default function MintSBT() {
 
   return (
     <Container>
+      {isLoading && (
+        <>
+          <Overlay />
+          <PopupMenu>
+            <Loader />
+            증명서를 발급 중입니다.
+          </PopupMenu>
+        </>
+      )}
       <FormContainer onSubmit={handleSubmit(onSubmit)}>
-        <Logo1 src={`/img/pknuLogo.png`} alt="PKNU Logo" />
+        <Logo1
+          src={`/img/pknuLogo.png`}
+          alt="PKNU Logo"
+        />
         <InputGroup>
           <label htmlFor="name">이름</label>
           <input
@@ -273,7 +315,10 @@ export default function MintSBT() {
           </select>
         </InputGroup>
 
-        <SubmitButton type="submit" disabled={isLoading}>
+        <SubmitButton
+          type="submit"
+          disabled={isLoading}
+        >
           {isLoading ? "로딩 중..." : "발급하기"}
         </SubmitButton>
       </FormContainer>

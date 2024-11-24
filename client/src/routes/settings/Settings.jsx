@@ -1,11 +1,5 @@
 import { BrowserProvider } from "ethers";
-import {
-  FaChevronRight,
-  FaLock,
-  FaSignOutAlt,
-  FaUser,
-  FaWallet,
-} from "react-icons/fa";
+import { FaChevronRight, FaLock, FaSignOutAlt, FaUser, FaWallet } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import BackIcon from "../../components/BackIcon";
