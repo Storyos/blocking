@@ -9,6 +9,7 @@ import styled from "styled-components";
 import CalendarComponent from "../components/Calendar";
 import NotifyIcon from "../components/NotifyIcon";
 import { auth } from "../firebase";
+import { FaRegSmileBeam, FaCertificate, FaBookReader, FaUsers } from "react-icons/fa"; // 아이콘 추가
 
 // 스타일링
 const Container = styled.div`
@@ -44,18 +45,19 @@ const UserContent = styled.div`
 `;
 
 const ProfilePicContainer = styled.div`
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   @media (min-width: 600px) {
     width: 50px;
     height: 50px;
   }
   border-radius: 50%;
-  background-color: #e6e6e6;
+  background-color: white;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  box-shadow: 0px 2px 4px #50c2c9;  /* Adding shadow */
 `;
 
 const TitleText = styled.div`
@@ -64,28 +66,27 @@ const TitleText = styled.div`
     width: 70%;
     font-size: 18px;
   }
-  text-align: left;
+  text-align: center;
   font-weight: bold;
-  margin-top: 35px;
+  margin-top: 55px;
 `;
 
 const ServiceLinkContainer = styled.div`
   z-index: 10;
-  margin-top: 20px;
   width: 100%;
-  height: 25vh;
-  bottom: 0;
-  background-color: #ffffff;
-  border-radius: 50px 50px 0px 0px;
-  box-shadow: 0px -4px 10px rgba(0, 0, 0, 0.15);
+  background-color: #80d0d3;
+  border-radius: 30px;
+  box-shadow: 0px -1px 5px #80d0d3;
 
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  padding-top: 40px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 0px;
+  justify-items: center;
+  padding: 20px 10px;
+
   @media (min-width: 600px) {
     width: 80%;
-    padding-top: 70px;
+    padding: 30px 10px;
     margin-top: 30px;
   }
 `;
@@ -100,17 +101,23 @@ const ServiceLink = styled(Link)`
   align-items: center;
   gap: 10px;
   font-size: 13px;
+
   @media (min-width: 600px) {
     font-size: 15px;
+  }
+
+  &:hover {
+    font-weight: bold;
+    color: #50c2c9; /* 텍스트 호버 색상 */
   }
 `;
 
 const ServiceIcon = styled.div`
-  width: 65px;
-  height: 65px;
+  width: 55px; /* Reduced size */
+  height: 55px; /* Reduced size */
   @media (min-width: 600px) {
-    width: 90px;
-    height: 90px;
+    width: 70px; /* Reduced size */
+    height: 70px; /* Reduced size */
   }
   border-radius: 50%;
   background-color: #ffffff;
@@ -125,13 +132,13 @@ const ServiceIcon = styled.div`
   transition: 0.1s;
   &:hover {
     color: #50c2c9; /* 버튼 호버 색상 */
+    transform: scale(1.1); /* 확대 효과 */
   }
 
   svg {
-    font-size: 45px;
-
+    font-size: 30px; /* Reduced icon size */
     @media (max-width: 600px) {
-      font-size: 30px;
+      font-size: 22px; /* Reduced icon size */
     }
   }
 `;
@@ -142,15 +149,15 @@ const PopupMenu = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: white;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
-  border-radius: 8px;
-  padding: 20px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  padding: 10px ;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 0px;
   z-index: 1000;
 `;
-
+  
 const Overlay = styled.div`
   position: fixed;
   top: 0;
@@ -162,22 +169,31 @@ const Overlay = styled.div`
 `;
 
 const MenuButton = styled.button`
-  background-color: #79d1d6;
-  color: white;
-  border: none;
-  border-radius: 15px;
-  padding: 10px;
-  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  color: #333;
   font-size: 16px;
-  font-family: "Noto Sans KR";
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  margin: 5px;
+  border: none;
+  background-color: white;
 
   &:hover {
-    background-color: #3aa7af;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  & > svg {
+    margin-right: 10px;
+    font-size: 20px;
+    color: #50c2c9;
   }
 `;
 
 const Main = () => {
-
   useEffect(() => {
     setUserName(auth.currentUser.displayName);
   }, []);
@@ -192,12 +208,12 @@ const Main = () => {
   };
 
   const handleSBTClick = () => {
-    setIsPopupOpen(true);
+    setIsPopupOpen(true); // Popup open when "SBT 발행" is clicked
   };
 
   const handleMenuSelect = (menu) => {
-    setIsPopupOpen(false);
-    navigate(`/mintsbt?menu=${encodeURIComponent(menu)}`);
+    setIsPopupOpen(false); // Close the popup after selection
+    navigate(`/mintsbt?menu=${encodeURIComponent(menu)}`); // Navigate to the selected menu page
   };
 
   return (
@@ -208,17 +224,11 @@ const Main = () => {
 
       <UserContent>
         <ProfilePicContainer>
-          <FaUser
-            size={17}
-            color="#50c2c9"
-          />
+          <FaUser size={17} color="#50c2c9" />
         </ProfilePicContainer>
         {userName}님, 안녕하세요.
       </UserContent>
-      <CalendarComponent
-        selectedDate={selectedDate}
-        handleDateChange={handleDateChange}
-      />
+      <CalendarComponent selectedDate={selectedDate} handleDateChange={handleDateChange} />
       <TitleText>주요서비스 바로가기</TitleText>
       <ServiceLinkContainer>
         <ServiceIconWrapper>
@@ -231,10 +241,7 @@ const Main = () => {
         </ServiceIconWrapper>
 
         <ServiceIconWrapper>
-          <ServiceLink
-            to="#"
-            onClick={handleSBTClick}
-          >
+          <ServiceLink to="#" onClick={handleSBTClick}>
             <ServiceIcon>
               <IoIosAddCircle />
             </ServiceIcon>
@@ -246,10 +253,10 @@ const Main = () => {
           <>
             <Overlay onClick={() => setIsPopupOpen(false)} />
             <PopupMenu>
-              <MenuButton onClick={() => handleMenuSelect("동아리")}>동아리</MenuButton>
-              <MenuButton onClick={() => handleMenuSelect("증명서")}>증명서</MenuButton>
-              <MenuButton onClick={() => handleMenuSelect("비교과 프로그램")}>비교과 프로그램</MenuButton>
-              <MenuButton onClick={() => handleMenuSelect("학생회")}>학생회</MenuButton>
+              <MenuButton onClick={() => handleMenuSelect("동아리")}><FaRegSmileBeam />동아리</MenuButton>
+              <MenuButton onClick={() => handleMenuSelect("증명서")}><FaCertificate />증명서</MenuButton>
+              <MenuButton onClick={() => handleMenuSelect("비교과 프로그램")}><FaBookReader />비교과 프로그램</MenuButton>
+              <MenuButton onClick={() => handleMenuSelect("학생회")}><FaUsers />학생회</MenuButton>
             </PopupMenu>
           </>
         )}
