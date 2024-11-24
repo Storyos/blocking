@@ -188,7 +188,7 @@ const Portfolio = () => {
       }
 
       const response = await axios.get(
-        `https://pscs.store:4000/api/sbtmint/getSBTData?userAddress=${address}`
+        `https://pscs.store/api/sbtmint/getSBTData?userAddress=${address}`
       );
       const sbtDetails = response.data.sbtDetails;
       setSbtData(sbtDetails);
@@ -310,7 +310,7 @@ const Portfolio = () => {
       <DeleteButton
         onClick={async () => {
           try {
-            const response = await axios.post("https://pscs.store:4000/api/sbtmint/deleteSBT", {
+            const response = await axios.post("https://pscs.store/api/sbtmint/deleteSBT", {
               tokenId: selectedSbt.tokenId,
             });
             alert("SBT가 성공적으로 삭제되었습니다!");
