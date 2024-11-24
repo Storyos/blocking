@@ -4,6 +4,7 @@ import { FaCertificate, FaLock, FaLockOpen } from "react-icons/fa"; // 아이콘
 import styled from "styled-components";
 import Modal from "../components/Modal"; // Modal 컴포넌트 불러오기
 import NotifyIcon from "../components/NotifyIcon";
+import { Loader } from "../components/Loader";
 
 // 스타일링
 const ModalContent = styled.div`
@@ -41,8 +42,6 @@ const InfoRow = styled.div`
     color: #666;
   }
 `;
-
-
 
 const Container = styled.div`
   display: flex;
@@ -154,6 +153,15 @@ const ModalInfo = styled.p`
   }
 `;
 
+const ErrorMessage = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 60vh;
+  color: #535353;
+`;
+
 const Portfolio = () => {
   const [lockState, setLockState] = useState([]);
   const [sbtData, setSbtData] = useState([]);
@@ -161,6 +169,7 @@ const Portfolio = () => {
   const [userAddress, setUserAddress] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSbt, setSelectedSbt] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const getUserAddress = async () => {
     if (window.ethereum) {
@@ -170,10 +179,12 @@ const Portfolio = () => {
         return accounts[0];
       } catch (error) {
         console.error("MetaMask 연결 실패:", error);
+        setErrorMessage("MetaMask 연결에 실패했습니다. 다시 시도해 주세요.");
         return null;
       }
     } else {
       console.error("MetaMask가 설치되지 않았습니다.");
+      setErrorMessage("MetaMask를 설치해주세요.");
       return null;
     }
   };
@@ -187,10 +198,11 @@ const Portfolio = () => {
         return;
       }
 
-      const response = await axios.get(
-        `https://pscs.store/api/sbtmint/getSBTData?userAddress=${address}`
-      );
+      const response = await axios.get(`https://pscs.store/api/sbtmint/getSBTData?userAddress=${address}`);
       const sbtDetails = response.data.sbtDetails;
+      if (sbtDetails.length === 0) {
+        setErrorMessage("포트폴리오 정보가 존재하지 않습니다. 자격증을 추가해 보세요.");
+      }
       setSbtData(sbtDetails);
       console.log(sbtDetails);
       setLockState(sbtDetails.map(() => true));
@@ -222,7 +234,11 @@ const Portfolio = () => {
   };
 
   if (isLoading) {
-    return <div>불러오는 중...</div>;
+    return (
+      <Container>
+        <Loader />
+      </Container>
+    );
   }
 
   return (
@@ -231,103 +247,112 @@ const Portfolio = () => {
         <Title>자격증</Title>
         <NotifyIcon />
       </Header>
-      <GridContainer>
-        {sbtData.map((sbt, index) => (
-          <div key={sbt.tokenId} onClick={() => openModal(sbt)}>
-            <Card>
-              <FaCertificate />
-              <h3>{sbt.metadata.status || `자격증 ${index + 1}`}</h3>
-              <p>{`학번: ${sbt.metadata.studentId}`}</p>
-              <p>{`학교: ${sbt.metadata.university}`}</p>
-            </Card>
-            <SbtContainer>
-              {`Token ID: ${sbt.tokenId}`}
-              <LockIcon
-                onClick={(e) => {
-                  e.stopPropagation();
-                  toggleLock(index);
-                }}
-              >
-                {lockState[index] ? <FaLock /> : <FaLockOpen />}
-              </LockIcon>
-            </SbtContainer>
-          </div>
-        ))}
-      </GridContainer>
-      <Modal isOpen={isModalOpen} onClose={closeModal}>
-  {selectedSbt && (
-    <ModalContent>
-      <ModalTitle>자격증 상세 정보</ModalTitle>
-
-      <Section>
-        <InfoRow>
-          <strong>상태</strong>
-          <span>{selectedSbt.metadata.status}</span>
-        </InfoRow>
-        <InfoRow>
-          <strong>학번</strong>
-          <span>{selectedSbt.metadata.studentId}</span>
-        </InfoRow>
-        <InfoRow>
-          <strong>학교</strong>
-          <span>{selectedSbt.metadata.university}</span>
-        </InfoRow>
-        <InfoRow>
-          <strong>Token ID</strong>
-          <span>{selectedSbt.tokenId}</span>
-        </InfoRow>
-      </Section>
-
-      <Section>
-        <InfoRow>
-          <strong>설명</strong>
-          <span>{selectedSbt.metadata.description}</span>
-        </InfoRow>
-        <InfoRow>
-          <strong>발급일</strong>
-          <span>{selectedSbt.metadata.issuedDate}</span>
-        </InfoRow>
-      </Section>
-
-      {selectedSbt.metadata.extraDetails && (
-        <Section>
-          <InfoRow>
-            <strong>동아리 이름</strong>
-            <span>{selectedSbt.metadata.extraDetails.clubName}</span>
-          </InfoRow>
-          <InfoRow>
-            <strong>역할</strong>
-            <span>{selectedSbt.metadata.extraDetails.role}</span>
-          </InfoRow>
-          <InfoRow>
-            <strong>활동 기간</strong>
-            <span>{selectedSbt.metadata.extraDetails.activityDuration}</span>
-          </InfoRow>
-        </Section>
+      {errorMessage ? (
+        <ErrorMessage>{errorMessage}</ErrorMessage>
+      ) : (
+        <GridContainer>
+          {sbtData.map((sbt, index) => (
+            <div
+              key={sbt.tokenId}
+              onClick={() => openModal(sbt)}
+            >
+              <Card>
+                <FaCertificate />
+                <h3>{sbt.metadata.status || `자격증 ${index + 1}`}</h3>
+                <p>{`학번: ${sbt.metadata.studentId}`}</p>
+                <p>{`학교: ${sbt.metadata.university}`}</p>
+              </Card>
+              <SbtContainer>
+                {`Token ID: ${sbt.tokenId}`}
+                <LockIcon
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleLock(index);
+                  }}
+                >
+                  {lockState[index] ? <FaLock /> : <FaLockOpen />}
+                </LockIcon>
+              </SbtContainer>
+            </div>
+          ))}
+        </GridContainer>
       )}
-
-      {/* 삭제 버튼 추가 */}
-      <DeleteButton
-        onClick={async () => {
-          try {
-            const response = await axios.post("https://pscs.store/api/sbtmint/deleteSBT", {
-              tokenId: selectedSbt.tokenId,
-            });
-            alert("SBT가 성공적으로 삭제되었습니다!");
-            closeModal(); // 모달 닫기
-            window.location.reload(); // 데이터 갱신
-          } catch (error) {
-            console.error("삭제 실패:", error);
-            alert("SBT 삭제 중 오류가 발생했습니다.");
-          }
-        }}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
       >
-        삭제하기
-      </DeleteButton>
-    </ModalContent>
-  )}
-</Modal>
+        {selectedSbt && (
+          <ModalContent>
+            <ModalTitle>자격증 상세 정보</ModalTitle>
 
+            <Section>
+              <InfoRow>
+                <strong>상태</strong>
+                <span>{selectedSbt.metadata.status}</span>
+              </InfoRow>
+              <InfoRow>
+                <strong>학번</strong>
+                <span>{selectedSbt.metadata.studentId}</span>
+              </InfoRow>
+              <InfoRow>
+                <strong>학교</strong>
+                <span>{selectedSbt.metadata.university}</span>
+              </InfoRow>
+              <InfoRow>
+                <strong>Token ID</strong>
+                <span>{selectedSbt.tokenId}</span>
+              </InfoRow>
+            </Section>
+
+            <Section>
+              <InfoRow>
+                <strong>설명</strong>
+                <span>{selectedSbt.metadata.description}</span>
+              </InfoRow>
+              <InfoRow>
+                <strong>발급일</strong>
+                <span>{selectedSbt.metadata.issuedDate}</span>
+              </InfoRow>
+            </Section>
+
+            {selectedSbt.metadata.extraDetails && (
+              <Section>
+                <InfoRow>
+                  <strong>동아리 이름</strong>
+                  <span>{selectedSbt.metadata.extraDetails.clubName}</span>
+                </InfoRow>
+                <InfoRow>
+                  <strong>역할</strong>
+                  <span>{selectedSbt.metadata.extraDetails.role}</span>
+                </InfoRow>
+                <InfoRow>
+                  <strong>활동 기간</strong>
+                  <span>{selectedSbt.metadata.extraDetails.activityDuration}</span>
+                </InfoRow>
+              </Section>
+            )}
+
+            {/* 삭제 버튼 추가 */}
+            <DeleteButton
+              onClick={async () => {
+                try {
+                  const response = await axios.post("https://pscs.store/api/sbtmint/deleteSBT", {
+                    tokenId: selectedSbt.tokenId,
+                  });
+                  alert("SBT가 성공적으로 삭제되었습니다!");
+                  closeModal(); // 모달 닫기
+                  window.location.reload(); // 데이터 갱신
+                } catch (error) {
+                  console.error("삭제 실패:", error);
+                  alert("SBT 삭제 중 오류가 발생했습니다.");
+                }
+              }}
+            >
+              삭제하기
+            </DeleteButton>
+          </ModalContent>
+        )}
+      </Modal>
     </Container>
   );
 };
