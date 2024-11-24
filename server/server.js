@@ -8,7 +8,7 @@ const sbtRoutes = require("./routes/sbtRoutes");
 const app = express();
 const PORT = 4000;
 
-app.use(cors());
+app.use(cors({origin: "https://pscs.netlify.app"}));
 app.use(express.json());
 
 // Klip 라우트를 /api/klip 경로에 매핑

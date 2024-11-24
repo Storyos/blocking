@@ -153,7 +153,7 @@ export default function MintSBT() {
 
       // Pinata에 데이터 업로드
       const pinataResponse = await axios.post(
-        `http://52.78.70.40:4000/api/sbt/uploadToPinata`,
+        `https://52.78.70.40:4000/api/sbt/uploadToPinata`,
         {
           name: data.name,
           studentId: data.studentId,
@@ -169,7 +169,7 @@ export default function MintSBT() {
       console.log("Pinata 업로드 성공:", pinataResponse.data.data.IpfsHash);
 
       // SBT 발급 요청
-      const mintResponse = await axios.post(`http://52.78.70.40:4000/api/sbtmint/mintSBT`, {
+      const mintResponse = await axios.post(`https://52.78.70.40:4000/api/sbtmint/mintSBT`, {
         recipientAddress: address, // MetaMask에서 가져온 지갑 주소
         sbtType: 0, // SBT 타입 (enum, 예: 0 = CLUB_ACTIVITY)
         name: data.name, // 이름
