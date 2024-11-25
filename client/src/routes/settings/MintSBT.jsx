@@ -26,15 +26,6 @@ const FormContainer = styled.form`
   box-shadow: 1px 1px rgba(86, 204, 212, 0.5);
 `;
 
-// const Title = styled.h2`
-//   text-align: center;
-//   font-size: 25px;
-//   font-weight: 700;
-//   color: #333;
-//   margin-bottom: 8px;
-//   margin-top: 15px;
-// `;
-
 const InputGroup = styled.div`
   display: flex;
   flex-direction: column;
@@ -280,6 +271,10 @@ export default function MintSBT() {
         </>
       )}
       <FormContainer onSubmit={handleSubmit(onSubmit)}>
+        <Logo
+          src={`/img/Logo.gif`}
+          alt="학사모"
+        />
         <Logo1
           src={`/img/pknuLogo.png`}
           alt="PKNU Logo"
@@ -319,7 +314,7 @@ export default function MintSBT() {
           type="submit"
           disabled={isLoading}
         >
-          {isLoading ? "로딩 중..." : "발급하기"}
+          {isLoading ? "발급 중" : "발급하기"}
         </SubmitButton>
       </FormContainer>
     </Container>
