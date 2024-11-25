@@ -227,7 +227,7 @@ const ErrorMessage = styled.div`
   justify-content: center;
   align-items: center;
   text-align: center;
-  height: 60vh;
+  height: 40vh;
   color: #535353;
 `;
 
