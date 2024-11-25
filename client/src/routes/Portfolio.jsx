@@ -75,31 +75,50 @@ const Title = styled.h2`
 const GridContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr); /* 한 줄에 3개의 박스 */
-  gap: 20px;
+  gap: 30px;
   width: 100%;
-  padding: 0 20px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  padding: 20px; /* 전체 컨테이너 여백 */
+  border-radius: 12px;
 `;
 
 const Card = styled.div`
   background-color: #ffffff;
   border: 1px solid #ddd;
-  border-radius: 20px;
-  box-shadow: 1px 1px rgba(86, 204, 212, 0.5);
-  padding: 18px;
   text-align: center;
   font-size: 11px;
   color: #333;
+  padding: 10px 20px;
+  background: linear-gradient(0deg, #a7e1e3,#ffffff, #ffffff); /* 부드럽고 밝은 그라디언트 */
+  box-shadow: 0px 2px 4px #50c2c9;
+  background-color: white;
+  border-radius: 15px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  /* 호버 효과 */
+  &:hover {
+    transform: translateY(-5px); /* 약간 위로 이동 */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.08); /* 호버 시 그림자 강화 */
+  }
 
   h3 {
-    margin: 8px 0 5px; /* h3 요소의 마진을 조정 */
-    font-size: 14px; /* h3의 폰트 크기 조정 */
+    margin: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #50c2c9; /* 어두운 텍스트 */
+    white-space: nowrap;
   }
 
   p {
-    margin: 0; /* p 요소의 기본 마진을 제거 */
-    font-size: 11px; /* p의 폰트 크기 조정 */
-  }
+    margin: 10px 0px 0;
+    font-size: 12px;
+    font-weight: 500;
+    color: #6b7280; /* 부드러운 회색 텍스트 */
+    white-space: nowrap; /* 줄바꿈 방지 */  
+    }
 `;
+
 
 const SbtContainer = styled.div`
   display: flex;
@@ -142,53 +161,10 @@ const ModalTitle = styled.h3`
   color: #333;
   text-align: center;
 `;
-// const StatsContainer = styled.div`
-//   display: flex;
-//   justify-content: space-around;
-//   gap: 15px; /* 간격 추가 */
-//   margin-bottom: 30px;
-//   padding: 20px; /* 전체 컨테이너 여백 */
-//   background-color: #ffffff;
-//   border-radius: 12px;
-// `;
-
-// const StatBox = styled.div`
-//   flex: 1; /* 각 StatBox가 동일한 크기를 가지도록 설정 */
-//   max-width: 200px; /* 박스 크기 제한 */
-//   text-align: center;
-//   padding: 15px 40px;
-//   // background: linear-gradient(0deg, #a7e1e3,#ffffff, #ffffff); /* 부드럽고 밝은 그라디언트 */
-//   box-shadow: 0px 2px 4px #50c2c9;
-//   background-color: white;
-
-//   border-radius: 15px;
-//   transition: transform 0.2s ease, box-shadow 0.2s ease;
-
-//   /* 호버 효과 */
-//   &:hover {
-//     transform: translateY(-5px); /* 약간 위로 이동 */
-//     box-shadow: 0 6px 10px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.08); /* 호버 시 그림자 강화 */
-//   }
-
-//   h3 {
-//     margin: 0;
-//     font-size: 24px;
-//     font-weight: bold;
-//     color: #50c2c9; /* 어두운 텍스트 */
-//   }
-
-//   p {
-//     margin: 10px 0px 0;
-//     font-size: 16px;
-//     font-weight: 500;
-//     color: #6b7280; /* 부드러운 회색 텍스트 */
-//     white-space: nowrap; /* 줄바꿈 방지 */  
-//     }
-// `;
 
 const GuideContainer = styled.div`
   padding: 24px 50px;
-  margin-top: 0px;
+  margin-top: 15px;
   border-radius: 12px;
   box-shadow: 0px 2px 4px #50c2c9;
   background-color: white;
@@ -316,18 +292,6 @@ const Portfolio = () => {
         <Title>자격증</Title>
         <NotifyIcon />
       </Header>
-      {/* // 통계 섹션 추가 */}
-      {/* <StatsContainer>
-        <StatBox>
-          <h3>{sbtData.filter((sbt) => sbt.metadata.status === "검토 중").length}</h3>
-          <p>검토 중</p>
-        </StatBox>
-        <StatBox>
-          <h3>{sbtData.filter((sbt) => sbt.metadata.status === "발급 완료").length}</h3>
-          <p>발급 완료</p>
-        </StatBox>
-      </StatsContainer> */}
-      {/* // 가이드 섹션 추가 */}
       <GuideContainer>
         <h3>SBT 발급 가이드</h3>
         <ul>
@@ -346,7 +310,7 @@ const Portfolio = () => {
               onClick={() => openModal(sbt)}
             >
               <Card>
-                <FaCertificate />
+                <FaCertificate size={15} color="#50c2c9" />
                 <h3>{sbt.metadata.status || `자격증 ${index + 1}`}</h3>
                 <p>{`학번: ${sbt.metadata.studentId}`}</p>
                 <p>{`학교: ${sbt.metadata.university}`}</p>
