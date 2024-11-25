@@ -3,7 +3,6 @@ import styled from "styled-components";
 export const Loader = styled.div`
   width: 40px; /* 크기를 좀 더 크게 */
   height: 40px;
-  // border: 4px solid transparent; /* 테두리는 투명 */
   border-top: 4px solid #6fa3ef; /* 상단에 파스텔 블루 */
   border-right: 4px solid #50c2c9; /* 우측에 민트 그린 */
   border-bottom: 4px solid #f0a3c1; /* 아래쪽에 핑크 */

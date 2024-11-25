@@ -34,22 +34,22 @@ const UserContent = styled.div`
   width: 90%;
   @media (min-width: 600px) {
     width: 70%;
-    font-size: 18px;
-    margin-top: 10px;
+    font-size: 16px;
+    margin-top: 4px;
   }
   display: flex;
   justify-content: left;
   align-items: center;
   font-weight: bold;
-  gap: 13px;
+  gap: 10px;
 `;
 
 const ProfilePicContainer = styled.div`
-  width: 30px;
-  height: 30px;
+  width: 20px;
+  height: 20px;
   @media (min-width: 600px) {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
   }
   border-radius: 50%;
   background-color: white;
@@ -64,11 +64,11 @@ const TitleText = styled.div`
   width: 90%;
   @media (min-width: 600px) {
     width: 70%;
-    font-size: 18px;
+    font-size: 16px;
   }
   text-align: center;
   font-weight: bold;
-  margin-top: 55px;
+  margin-top: 20px;
 `;
 
 const ServiceLinkContainer = styled.div`
@@ -86,7 +86,7 @@ const ServiceLinkContainer = styled.div`
 
   @media (min-width: 600px) {
     width: 80%;
-    padding: 30px 10px;
+    padding: 15px 0px;
     margin-top: 30px;
   }
 `;
@@ -99,7 +99,7 @@ const ServiceLink = styled(Link)`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 15px;
   font-size: 13px;
 
   @media (min-width: 600px) {
@@ -116,8 +116,9 @@ const ServiceIcon = styled.div`
   width: 55px; /* Reduced size */
   height: 55px; /* Reduced size */
   @media (min-width: 600px) {
-    width: 70px; /* Reduced size */
-    height: 70px; /* Reduced size */
+    width: 60px; /* Reduced size */
+    height: 60px; /* Reduced size */
+
   }
   border-radius: 50%;
   background-color: #ffffff;

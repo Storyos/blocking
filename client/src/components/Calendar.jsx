@@ -18,8 +18,8 @@ const CalendarContainer = styled.div`
     @media (min-width: 600px) {
       width: 70%;
     }
-    font-size: 18px; /* 글자 크기 증가 */
-    line-height: 1.6; /* 글자 간격 조정 */
+    font-size: 16px; /* 글자 크기 증가 */
+    line-height: 1.2; /* 글자 간격 조정 */
     border-radius: 16px; /* 둥근 모서리 추가 */
     border: 2px solid #50c2c9; /* 테두리 색상 추가 */
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
@@ -30,11 +30,11 @@ const CalendarContainer = styled.div`
     border: none; /* 타일의 테두리 제거 */
     font-size: 12px; /* 날짜 글자 크기 */
     border-radius: 10px;
-    width: 45px;
-    height: 40px;
+    width: 35px;
+    height: 30px;
     @media (min-width: 600px) {
-      height: 50px;
-      font-size: 14px;
+      height: 40px;
+      font-size: 12px;
     }
   }
 

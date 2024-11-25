@@ -59,23 +59,28 @@ const InputGroup = styled.div`
     padding: 8px;
   }
 `;
+
+const LogoContainer = styled.div`
+  position: relative; /* Logo와 Logo1의 위치 관계를 설정하기 위한 컨테이너 */
+  width: 200px; /* Logo1의 너비와 동일하게 설정 */
+  margin: 0 auto; /* 중앙 정렬 */
+`;
+
 const Logo1 = styled.img`
-  width: 200px;
+  width: 100%;
   height: auto;
-  margin: 0 auto;
   display: block;
-  position: relative; /* 부모 요소로 위치를 상대적으로 설정 */
 `;
 
 const Logo = styled.img`
-  width: 50px;
+  width: 40px;
   height: auto;
   margin: 0 auto;
   display: block;
   position: absolute;
-  top: 160px; /* 위치를 조정하여 Logo1 위로 올리기 */
-  left: 55%; /* 수평으로 가운데 정렬 */
-  transform: translateX(-50%) rotate(45deg); /* 75도 회전 */
+  top: 0px; /* 위치를 조정하여 Logo1 위로 올리기 */
+  left: 75%; /* 수평으로 가운데 정렬 */
+  transform: translateX(-50%) rotate(50deg); /* 75도 회전 */
 `;
 
 const SubmitButton = styled.button`
@@ -271,14 +276,16 @@ export default function MintSBT() {
         </>
       )}
       <FormContainer onSubmit={handleSubmit(onSubmit)}>
-        <Logo
-          src={`/img/Logo.gif`}
-          alt="학사모"
-        />
-        <Logo1
-          src={`/img/pknuLogo.png`}
-          alt="PKNU Logo"
-        />
+        <LogoContainer>
+          <Logo1
+            src={`/img/pknuLogo.png`}
+            alt="PKNU Logo"
+          />
+          <Logo
+            src={`/img/Logo.gif`}
+            alt="학사모"
+          />
+        </LogoContainer>
         <InputGroup>
           <label htmlFor="name">이름</label>
           <input
