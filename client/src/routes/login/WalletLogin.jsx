@@ -77,7 +77,7 @@ const Btn = styled(Link)`
   box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
   
   &:hover {
-    background-color: #3ba9b1;
+    background-color: #ffffff;
     transform: translateY(-3px);
   }
   a {
