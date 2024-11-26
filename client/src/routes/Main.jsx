@@ -45,8 +45,8 @@ const UserContent = styled.div`
 `;
 
 const ProfilePicContainer = styled.div`
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
   @media (min-width: 600px) {
     width: 40px;
     height: 40px;
@@ -107,8 +107,8 @@ const ServiceLink = styled(Link)`
   }
 
   &:hover {
-    font-weight: bold;
-    color: #50c2c9; /* 텍스트 호버 색상 */
+    font-weight: thin;
+    color: grey; /* 텍스트 호버 색상 */
   }
 `;
 
